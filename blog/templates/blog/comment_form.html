@@ -1,0 +1,42 @@
+{#{% load crispy_forms_tags %}#}
+{##}
+{#<div class="row py-5">#}
+{#    <div class="col-sm-12">#}
+{#        <div class="card">#}
+{#            {% if form_title %}#}
+{#                <div class="card-header">#}
+{#                    {{ form_title }}#}
+{#                </div>#}
+{#            {% endif %}#}
+{#            <div class="card-body">#}
+{#                {% if form.helper %}#}
+{#                    {% crispy form form.helper %}#}
+{#                {% else %}#}
+{#                    {% crispy form %}#}
+{#                {% endif %}#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{#</div>#}
+<form id="frm" action="{% url 'blog:comment_new' post.pk %}" method="post" onsubmit="return EmptyCheck();">
+    <div class="input-group shadow-sm mb-3">
+        <span class="anchor" id="end"></span>
+        {% csrf_token %}
+            <textarea name="content" id="comment" class="input form-control" style="height: 75px"
+                      {% if not user.is_authenticated %}
+                      disabled
+                      placeholder="로그인 후 댓글을 입력해 주세요."
+                      {% else %}
+                      placeholder="댓글을 입력해 주세요"
+                      {% endif %}
+            ></textarea>
+
+        <button class="btn btn-outline-primary fw-bold comment-submit" type="submit"
+                onclick="EmptyCheck()"
+            {% if not user.is_authenticated %}
+                disabled
+            {% endif %}
+        >작성</button>
+    </div>
+
+</form>

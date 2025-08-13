@@ -1,0 +1,59 @@
+{% extends "memo/base.html" %}
+
+
+{% block content %}
+    <div class="d-flex border-bottom py-3 mb-3">
+        <a class="btn btn-{% if not 'status' in path%}{% else %}outline-{% endif %}dark me-3" href="{% url 'memo:index'%}">전체({{ memo_count }})</a>
+        <a class="btn btn-{% if 'True' in path %}{% else %}outline-{% endif %}dark me-3" href="{% url 'memo:index_status' 'True' %}">진행중({{ memo_on_going.count }})</a>
+        <a class="btn btn-{% if 'False' in path %}{% else %}outline-{% endif %}dark me-3" href="{% url 'memo:index_status' 'False' %}">완료({{ memo_finished.count }})</a>
+
+        {% if user.is_staff or user.is_superuser %}
+            <a class="ms-auto btn btn-secondary" href="{% url 'memo:memo_new' %}">메모 작성</a>
+        {% endif %}
+
+    </div>
+
+    {% include 'memo/memo_list.html' %}
+
+    {% include 'memo/pagination.html' %}
+
+    {% include 'memo/memo_modal.html' %}
+
+    <style>
+        .card-body p{
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+        }
+        .card-body ol{
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+          -webkit-line-clamp: 5;
+          -webkit-box-orient: vertical;
+        }
+        .card-body ul{
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+          -webkit-line-clamp: 5;
+          -webkit-box-orient: vertical;
+        }
+    </style>
+{% endblock %}
+
+{% block script %}
+<script type='text/javascript'>
+const delete_memo_elements = document.getElementsByClassName("memo-delete");
+Array.from(delete_memo_elements).forEach(function(element) {
+    element.addEventListener('click', function() {
+        if(confirm("정말로 메모를 삭제하시겠습니까?")) {
+            location.href = this.dataset.uri;
+        };
+    });
+});
+
+</script>
+{% endblock %}

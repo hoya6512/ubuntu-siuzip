@@ -1,0 +1,49 @@
+{% extends "blog/base.html" %}
+
+{% block content %}
+    <div class="d-flex border-bottom py-3">
+        {% if user.is_staff or user.is_superuser %}
+        <a class="ms-auto btn btn-secondary" href="{% url 'league:player_new' %}">참가자 추가</a>
+        {% endif %}
+    </div>
+      <table class="table table-striped table-hover">
+          <thead class="text-center">
+                <tr>
+                    <th class="align-content-center" scope="col" rowspan="2">참가자</th>
+                    <th class="align-content-center" scope="col" colspan="2">PL</th>
+                    <th class="align-content-center" scope="col" colspan="2">LL</th>
+                    <th class="align-content-center" scope="col" colspan="2">BL</th>
+                    <th class="align-content-center" scope="col" colspan="2">SA</th>
+                    <th class="align-content-center" scope="col" rowspan="2">컵포인트</th>
+                    <th class="align-content-center" scope="col" rowspan="2"></th>
+                </tr>
+                <tr>
+                    <th>팀</th>
+                    <th>포트</th>
+                    <th>팀</th>
+                    <th>포트</th>
+                    <th>팀</th>
+                    <th>포트</th>
+                    <th>팀</th>
+                    <th>포트</th>
+                </tr>
+          </thead>
+          <tbody class="text-center">
+            {% for player in players %}
+                <tr>
+                    <td class="align-content-center">{{ player.name }}</td>
+                    <td class="align-content-center">{{ player.pl_team.team_name }}</td>
+                    <td class="align-content-center">{{ player.pl_pot }}</td>
+                    <td class="align-content-center">{{ player.ll_team.team_name }}</td>
+                    <td class="align-content-center">{{ player.ll_pot }}</td>
+                    <td class="align-content-center">{{ player.bl_team.team_name }}</td>
+                    <td class="align-content-center">{{ player.bl_pot }}</td>
+                    <td class="align-content-center">{{ player.sa_team.team_name }}</td>
+                    <td class="align-content-center">{{ player.sa_pot }}</td>
+                    <td class="align-content-center">{{ player.cup_point }}</td>
+                    <td class="align-content-center"><a class="btn btn-outline-danger" role="button" href="{% url 'league:player_edit' player.pk %}">수정하기</a></td>
+                </tr>
+            {% endfor %}
+          </tbody>
+      </table>
+{% endblock %}

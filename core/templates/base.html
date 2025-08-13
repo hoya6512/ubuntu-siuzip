@@ -1,0 +1,66 @@
+{% load component_tags static %}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>시우네 siuzip.com</title>
+    <link rel="stylesheet" href="{% static 'bootstrap/5.3.3/css/bootstrap.min.css' %}">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+{#    <link rel="stylesheet" href="{% static 'summernote/0.9.0/summernote-lite.css' %}">#}
+{#    <link rel="stylesheet" href="{% static 'simplemde/1.11.2/css/simplemde.min.css' %}">#}
+
+
+</head>
+<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+    <header>
+        {% include "navbar.html" %}
+
+    </header>
+
+    <main class="section py-3">
+       <div class="container-xl">
+           {% block content %}{% endblock %}
+       </div>
+    </main>
+
+
+
+
+
+    {% if debug %}
+         <script src="{% static 'htmx/1.9.12/htmx.js' %}"></script>
+    {% else %}
+         <script src="{% static 'htmx/1.9.12/htmx.min.js' %}"></script>
+    {% endif %}
+    <script src="{% static 'htmx/ext/hx-get-with-timestamp.js' %}"></script>
+    <script src="{% static "toast-messages.js" %}"></script>
+    <script src="{% static 'observe-node-insertion.js' %}"></script>
+    <script src="{% static 'popper/2.11.8/js/popper.min.js' %}"></script>
+    <script src="{% static "bootstrap/5.3.3/js/bootstrap.min.js" %}"></script>
+    <script src="{% static "jquery/3.7.1/jquery-3.7.1.min.js" %}"></script>
+{#    <script src="{% static "summernote/0.9.0/summernote-lite.js" %}"></script>#}
+{#    <script src="{% static "summernote/0.9.0/lang/summernote-ko-KR.js" %}"></script>#}
+{#    <script src="{% static "simplemde/1.11.2/js/simplemde.min.js" %}"></script>#}
+
+    {% include "_messages_as_event.html" %}
+
+    <!-- 자바스크립트 Start -->
+    {% block script %}
+    {% endblock %}
+    <!-- 자바스크립트 End -->
+<style>
+    .section { position: relative }
+    .section .anchor { position: absolute; top: -150px }
+</style>
+</body>
+</html>

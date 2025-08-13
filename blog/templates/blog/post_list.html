@@ -1,0 +1,77 @@
+{% load blog_filter %}
+
+<ul class="blog-list list-group">
+    {% if not blog_list %}
+  <h4 class="text-center">결과가 없습니다.</h4>
+    {% endif %}
+  {% for blog in blog_list %}
+  <li class="shadow-sm p-3" style="min-height: 195px">
+    <div class="row">
+      <div class="col-lg-2 d-flex align-items-center">
+        <a href="{% url 'blog:post_detail' blog.pk %}">
+            {% if blog.thumbnail %}
+                <img class="blog-img img-fluid img-thumbnail" alt="blog thumbnail" src="{{ blog.thumbnail.url }}"/>
+            {% else %}
+                <img src="/media/icon-image-not-found.jpg"
+                     alt="image not found"
+                     class="blog-img img-fluid img-thumbnail"
+                />
+            {% endif %}
+        </a>
+      </div>
+      <div class="col-lg-10">
+        <p class="mb-2 mt-2">
+          <span class="category py-1 px-2 rounded-pill">
+              {{ blog.category }}
+          </span>
+        </p>
+        <h2 class="title my-3">
+          <a
+            class="link-body-emphasis link-underline link-underline-opacity-0 link-underline-opacity-0-hover rounded shadow-sm p-3"
+            style="font-weight: 900; background-color: #f7f7f7"
+            href="{% url 'blog:post_detail' blog.pk %}"
+            id=""
+          >
+              {{ blog.title }}
+          </a>
+        </h2>
+{#        <div class="detail text-emphasis-secondary rounded shadow-sm p-1"#}
+{#             role="button"#}
+{#             onclick="location.href='{% url 'blog:post_detail' blog.pk %}'"#}
+{#             style="background-color: #f7f7f7">#}
+{##}
+{#              {{ blog.content|mark }}#}
+{##}
+{#        </div>#}
+
+        <div class="detail-info pt-2">
+          <div class="detail-info-left">
+            <img
+              class="img-fluid rounded-circle"
+              src="{{ blog.author.profile.avatar.url }}"
+              style="width: 40px; height: 40px"
+            />
+            <div class="detail-info-content">
+              <span>{{ blog.author.nick_name }}</span>
+              <span class="text-bar"></span>
+              <span>{{ blog.created_at|date:'Y-m-d a h:i' }}</span>
+            </div>
+          </div>
+          <div class="detail-info-right">
+            <a href="{% url 'blog:post_detail' blog.pk %}">
+              <span class="comment badge rounded-pill bg-light text-dark fs-6 py-3">
+                    <i class="fa-solid fa-heart"></i> {{ blog.like_users.count }}
+                  {% if blog.comment_set.count > 0 %}
+                    <i class="fa-solid fa-comments ms-2"></i> {{ blog.comment_set.count }}
+                  {% else %}
+                    <i class="fa-solid fa-comments ms-2"></i> 0
+                  {% endif %}
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </li>
+    {% endfor %}
+</ul>

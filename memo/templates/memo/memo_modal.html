@@ -1,0 +1,40 @@
+<!-- Modal -->
+{% for memo in memo_list %}
+    <div class="modal fade" id="MemoModal{{ memo.pk }}" tabindex="-1" aria-labelledby="MemoModalLabel{{ memo.pk }}" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="MemoModalLabel{{ memo.pk }}">{{ memo.title }}</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+             <div class="p-3 border-bottom d-flex">
+                      <img
+                      class="img-fluid rounded-circle"
+                      src="{{ memo.author.profile.avatar.url }}"
+                      style="width: 30px; height: 30px"
+                      />
+                      <span class="mx-2 align-self-center">{{ memo.author.nick_name }}</span>
+                      <span class="text-secondary align-self-center" style="font-size: small">{{ memo.created_at|timesince }} 전 작성</span>
+
+                     {% if memo.due_date|timeuntil == '0분' %}
+                          <span class="ms-auto align-self-center" style="color: red"><i class="fa-solid fa-calendar-days"></i> ~ {{ memo.due_date | date:'m월 d일' }}</span>
+                      {% else %}
+                          <span class="ms-auto align-self-center"><i class="fa-solid fa-calendar-days"></i> ~ {{ memo.due_date | date:'m월 d일' }}</span>
+                      {% endif %}
+                  </div>
+          <div class="modal-body">
+            {{ memo.content|safe }}
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-outline-primary shadow-sm"
+                          role="button"
+                          onclick="location.href='{% url "memo:memo_edit" memo.pk %}'"><i class="fa-solid fa-pen"></i> 수정
+                      </button>
+            <button class="memo-delete btn btn-outline-secondary shadow-sm" role="button"
+                              href="javascript:void(0)"
+                              data-uri="{% url "memo:memo_delete" memo.pk %}"><i class="fa-solid fa-trash"></i> 삭제</button>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endfor %}

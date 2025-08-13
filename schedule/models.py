@@ -1,0 +1,20 @@
+from django.db import models
+
+from accounts.models import User
+from django.urls import reverse
+
+
+class Event(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField("제목", max_length=100)
+    content = models.TextField("내용")
+    start_time = models.DateTimeField("시작 일시")
+    end_time = models.DateTimeField("종료 일시")
+    created_at = models.DateTimeField("작성일", auto_now_add=True)
+    updated_at = models.DateTimeField("수정일", auto_now=True)
+
+    @property
+    def get_html_url(self):
+
+        url = reverse("schedule:event_detail", args=(self.id,))
+        return f'<a class="badge bg-secondary link-offset-2 link-underline link-underline-opacity-0" href="{url}"> {self.title} </a>'

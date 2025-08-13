@@ -1,0 +1,444 @@
+{% extends "blog/base.html" %}
+
+{% block content %}
+    {% if request.user.is_staff %}
+        <table class="w-100">
+            <tbody>
+                <tr>
+                    <td colspan="2">
+                        <button type="button" class="btn btn-outline-primary w-100" onclick="location.href='{% url 'league:league_create_all' %}'">리그 전체 데이터 만들기</button>
+                    </td>
+                    <td colspan="2">
+                        <button type="button" class="btn btn-outline-success w-100" onclick="location.href='{% url 'league:league_update_all' %}'">전체 리그 데이터 업데이트</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td><button type="button" class="btn btn-outline-primary w-100" onclick="location.href='{% url 'league:create_league_data' '39' %}'">PL데이터 만들기</button></td>
+                    <td><button type="button" class="btn btn-outline-primary w-100" onclick="location.href='{% url 'league:create_league_data' '140' %}'">LL데이터 만들기</button></td>
+                    <td><button type="button" class="btn btn-outline-success w-100" onclick="location.href='{% url 'league:update_league_data' '39' %}'">PL데이터 업데이트</button></td>
+                    <td><button type="button" class="btn btn-outline-success w-100" onclick="location.href='{% url 'league:update_league_data' '140' %}'">LL데이터 업데이트</button></td>
+                </tr>
+                <tr>
+                    <td><button type="button" class="btn btn-outline-primary w-100" onclick="location.href='{% url 'league:create_league_data' '78' %}'">BL데이터 만들기</button></td>
+                    <td><button type="button" class="btn btn-outline-primary w-100" onclick="location.href='{% url 'league:create_league_data' '135' %}'">SA데이터 만들기</button></td>
+                    <td><button type="button" class="btn btn-outline-success w-100" onclick="location.href='{% url 'league:update_league_data' '78' %}'">BL데이터 업데이트</button></td>
+                    <td><button type="button" class="btn btn-outline-success w-100" onclick="location.href='{% url 'league:update_league_data' '135' %}'">SA데이터 업데이트</button></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <button type="button" class="btn btn-outline-secondary w-100" onclick="location.href='{% url 'league:update_player_data'%}'">참가자 DB 업데이트</button>
+                    </td>
+                    <td colspan="2">
+                        <button type="button" class="btn btn-outline-secondary w-100" onclick="location.href='{% url 'league:player_list'%}'">참가자 관리</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    {% endif %}
+    <div>
+        <img
+            src="/media/2025점수판배너.png"
+            alt="banner"
+            class="w-100 mb-3"
+        />
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+          <table class="table table-hover w-100">
+            <thead>
+              <tr>
+                <th class="text-center" scope="col"></th>
+                <th class="text-center" scope="col">이름</th>
+                <th class="text-center" scope="col">승점</th>
+                <th class="text-center" scope="col">경기</th>
+                <th class="text-center" scope="col">승</th>
+                <th class="text-center" scope="col">무</th>
+                <th class="text-center" scope="col">패</th>
+                <th class="text-center" scope="col">득실</th>
+                <th class="text-center" scope="col">컵</th>
+              </tr>
+            </thead>
+            <tbody id="playerStanding">
+                {% for player in player_list %}
+                    <tr class="text-center">
+                        <td></td>
+                        <td>{{ player.name }}</td>
+                        <td>{{ player.total_point }}</td>
+                        <td>{{ player.total_game }}</td>
+                        <td>{{ player.total_win }}</td>
+                        <td>{{ player.total_draw }}</td>
+                        <td>{{ player.total_lose }}</td>
+                        <td>{{ player.total_goal_diff }}</td>
+                        <td>{{ player.cup_point }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+          </table>
+
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th class="text-center" scope="col"></th>
+                <th class="text-center" scope="col">
+                  <img
+                    src="https://media-3.api-sports.io/football/leagues/39.png"
+                    style="width: 1rem"
+                  />PL
+                </th>
+                <th class="text-center" scope="col">
+                  <img
+                    src="https://media-3.api-sports.io/football/leagues/140.png"
+                    style="width: 1rem"
+                  />LL
+                </th>
+                <th class="text-center" scope="col">
+                  <img
+                    src="https://media-3.api-sports.io/football/leagues/78.png"
+                    style="width: 1rem"
+                  />BL
+                </th>
+                <th class="text-center" scope="col">
+                  <img
+                    src="https://media-3.api-sports.io/football/leagues/135.png"
+                    style="width: 1rem"
+                  />SA
+                </th>
+              </tr>
+            </thead>
+            <tbody id="playerTeamStanding">
+
+
+                {% for player in player_list %}
+                    <tr>
+                        <td class="text-center" style="vertical-align: middle">{{ player.name }}</td>
+                        <td class="text-center team-bg" style="
+                        background-image: url({{ player.pl_team.team_logo_server }});">
+                            <p class="fs-6">{{ player.pl_team.win }}/{{ player.pl_team.draw }}/{{ player.pl_team.lose }}({{ player.pl_team.goals_diff }})</p>
+                            <p class="fs-5">{{ player.pl_team.points }}점</p>
+                            <p class="fs-6">{{ player.pl_team.recent }}</p>
+                            <p class="small">(POT {{ player.pl_pot }})</p>
+                        </td>
+                        <td class="text-center team-bg" style="
+                        background-image: url({{ player.ll_team.team_logo_server }});">
+                            <p class="fs-6">{{ player.ll_team.win }}/{{ player.ll_team.draw }}/{{ player.ll_team.lose }}({{ player.ll_team.goals_diff }})</p>
+                            <p class="fs-5">{{ player.ll_team.points }}점</p>
+                            <p class="fs-6">{{ player.ll_team.recent }}</p>
+                            <p class="small">(POT {{ player.ll_pot }})</p>
+                        </td>
+                        <td class="text-center team-bg" style="
+                        background-image: url({{ player.bl_team.team_logo_server }});">
+                            <p class="fs-6">{{ player.bl_team.win }}/{{ player.bl_team.draw }}/{{ player.bl_team.lose }}({{ player.bl_team.goals_diff }})</p>
+                            <p class="fs-5">{{ player.bl_team.points }}점</p>
+                            <p class="fs-6">{{ player.bl_team.recent }}</p>
+                            <p class="small">(POT {{ player.bl_pot }})</p>
+                        </td>
+                        <td class="text-center team-bg" style="
+                        background-image: url({{ player.sa_team.team_logo_server }});">
+                            <p class="fs-6">{{ player.sa_team.win }}/{{ player.sa_team.draw }}/{{ player.sa_team.lose }}({{ player.sa_team.goals_diff }})</p>
+                            <p class="fs-5">{{ player.sa_team.points }}점</p>
+                            <p class="fs-6">{{ player.sa_team.recent }}</p>
+                            <p class="small">(POT {{ player.sa_pot }})</p>
+                        </td>
+                    </tr>
+                {% endfor %}
+
+
+            </tbody>
+          </table>
+          <div id="playerUpdateTime"></div>
+        </div>
+
+    <div class="col-md-6">
+          <ul class="nav nav-tabs nav-fill">
+            <li class="nav-item">
+              <button
+                class="nav-link active"
+                id="plTableTab"
+                data-bs-toggle="tab"
+                data-bs-target="#plTable"
+                aria-controls="plTable"
+                aria-selected="true"
+                type="button"
+              >
+                <img
+                  src="https://media-3.api-sports.io/football/leagues/39.png"
+                  style="width: 1rem"
+                />
+                PL
+              </button>
+            </li>
+            <li class="nav-item">
+              <button
+                class="nav-link"
+                id="llTableTab"
+                data-bs-toggle="tab"
+                data-bs-target="#llTable"
+                aria-controls="llTable"
+                aria-selected="false"
+                type="button"
+              >
+                <img
+                  src="https://media-3.api-sports.io/football/leagues/140.png"
+                  style="width: 1rem"
+                />
+                LL
+              </button>
+            </li>
+            <li class="nav-item">
+              <button
+                class="nav-link"
+                id="blTableTab"
+                data-bs-toggle="tab"
+                data-bs-target="#blTable"
+                aria-controls="blTable"
+                aria-selected="false"
+                type="button"
+              >
+                <img
+                  src="https://media-3.api-sports.io/football/leagues/78.png"
+                  style="width: 1rem"
+                />
+                BL
+              </button>
+            </li>
+            <li class="nav-item">
+              <button
+                class="nav-link"
+                id="saTableTab"
+                data-bs-toggle="tab"
+                data-bs-target="#saTable"
+                aria-controls="saTable"
+                aria-selected="false"
+                type="button"
+              >
+                <img
+                  src="https://media-3.api-sports.io/football/leagues/135.png"
+                  style="width: 1rem"
+                />
+                SA
+              </button>
+            </li>
+          </ul>
+          <div class="tab-content" id="myTabContent">
+            <div
+              class="tab-pane fade show active"
+              id="plTable"
+              role="tabpanel"
+              aria-labelledby="plTable-tab"
+            >
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th class="text-center" scope="col"></th>
+                    <th class="text-center" scope="col">팀</th>
+                    <th class="text-center" scope="col">승점</th>
+                    <th class="text-center" scope="col">경기</th>
+                    <th class="text-center" scope="col">승</th>
+                    <th class="text-center" scope="col">무</th>
+                    <th class="text-center" scope="col">패</th>
+                    <th class="text-center" scope="col">득실</th>
+                    <th class="text-center" scope="col">전적</th>
+                    <th class="text-center" scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody style="vertical-align: middle" id="plStanding">
+                    {% for team in pl_standings %}
+                        <tr>
+                            <th class="text-center" scope="row">{{ team.rank }}</th>
+                            <th class="text-center"><img src="{{ team.team_logo_server }}" style='width:2rem'> <p class="teamName mb-0">
+                                {{ team.team_name }}</p></th>
+                            <th class="text-center">{{ team.points }}</th>
+                            <th class="text-center">{{ team.played }}</th>
+                            <th class="text-center">{{ team.win }}</th>
+                            <th class="text-center">{{ team.draw }}</th>
+                            <th class="text-center">{{ team.lose }}</th>
+                            <th class="text-center">{{ team.goals_diff }}</th>
+                            <th class="text-center">{{ team.recent }}</th>
+                            {% if not team.uefa == Null %}
+                            <th class="text-center"><i href="#" class="fa-solid fa-circle-question" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{{ team.uefa }}"></i></th>
+                            {% endif %}
+                        </tr>
+
+                    {% endfor %}
+                </tbody>
+              </table>
+              <div id="plUpdateTime"><p>업데이트 : {{ pl_standings.first.updated_from_server }}</p></div>
+            </div>
+
+            <div
+              class="tab-pane fade"
+              id="llTable"
+              role="tabpanel"
+              aria-labelledby="llTable-tab"
+            >
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th class="text-center" scope="col"></th>
+                    <th class="text-center" scope="col">팀</th>
+                    <th class="text-center" scope="col">승점</th>
+                    <th class="text-center" scope="col">경기</th>
+                    <th class="text-center" scope="col">승</th>
+                    <th class="text-center" scope="col">무</th>
+                    <th class="text-center" scope="col">패</th>
+                    <th class="text-center" scope="col">득실</th>
+                    <th class="text-center" scope="col">전적</th>
+                  </tr>
+                </thead>
+                <tbody style="vertical-align: middle" id="llStanding">
+                    {% for team in ll_standings %}
+                        <tr>
+                            <th class="text-center" scope="row">{{ team.rank }}</th>
+                            <th class="text-center"><img src="{{ team.team_logo_server }}" style='width:2rem'> <p class="teamName mb-0">
+                                {{ team.team_name }}</p></th>
+                            <th class="text-center">{{ team.points }}</th>
+                            <th class="text-center">{{ team.played }}</th>
+                            <th class="text-center">{{ team.win }}</th>
+                            <th class="text-center">{{ team.draw }}</th>
+                            <th class="text-center">{{ team.lose }}</th>
+                            <th class="text-center">{{ team.goals_diff }}</th>
+                            <th class="text-center">{{ team.recent }}</th>
+                            {% if not team.uefa == Null %}
+                            <th class="text-center"><i href="#" class="fa-solid fa-circle-question" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{{ team.uefa }}"></i></th>
+                            {% endif %}
+                        </tr>
+
+                    {% endfor %}
+                </tbody>
+              </table>
+              <div id="llUpdateTime"><p>업데이트 : {{ ll_standings.first.updated_from_server }}</p></div>
+            </div>
+
+            <div
+              class="tab-pane fade"
+              id="blTable"
+              role="tabpanel"
+              aria-labelledby="blTable-tab"
+            >
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th class="text-center" scope="col"></th>
+                    <th class="text-center" scope="col">팀</th>
+                    <th class="text-center" scope="col">승점</th>
+                    <th class="text-center" scope="col">경기</th>
+                    <th class="text-center" scope="col">승</th>
+                    <th class="text-center" scope="col">무</th>
+                    <th class="text-center" scope="col">패</th>
+                    <th class="text-center" scope="col">득실</th>
+                    <th class="text-center" scope="col">전적</th>
+                  </tr>
+                </thead>
+                <tbody style="vertical-align: middle" id="blStanding">
+                    {% for team in bl_standings %}
+                        <tr>
+                            <th class="text-center" scope="row">{{ team.rank }}</th>
+                            <th class="text-center"><img src="{{ team.team_logo_server }}" style='width:2rem'> <p class="teamName mb-0">
+                                {{ team.team_name }}</p></th>
+                            <th class="text-center">{{ team.points }}</th>
+                            <th class="text-center">{{ team.played }}</th>
+                            <th class="text-center">{{ team.win }}</th>
+                            <th class="text-center">{{ team.draw }}</th>
+                            <th class="text-center">{{ team.lose }}</th>
+                            <th class="text-center">{{ team.goals_diff }}</th>
+                            <th class="text-center">{{ team.recent }}</th>
+                            {% if not team.uefa == Null %}
+                            <th class="text-center"><i href="#" class="fa-solid fa-circle-question" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{{ team.uefa }}"></i></th>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+              </table>
+              <div id="plUpdateTime"><p>업데이트 : {{ bl_standings.first.updated_from_server }}</p></div>
+            </div>
+
+            <div
+              class="tab-pane fade"
+              id="saTable"
+              role="tabpanel"
+              aria-labelledby="saTable-tab"
+            >
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th class="text-center" scope="col"></th>
+                    <th class="text-center" scope="col">팀</th>
+                    <th class="text-center" scope="col">승점</th>
+                    <th class="text-center" scope="col">경기</th>
+                    <th class="text-center" scope="col">승</th>
+                    <th class="text-center" scope="col">무</th>
+                    <th class="text-center" scope="col">패</th>
+                    <th class="text-center" scope="col">득실</th>
+                    <th class="text-center" scope="col">전적</th>
+                  </tr>
+                </thead>
+                <tbody style="vertical-align: middle" id="saStanding">
+                    {% for team in sa_standings %}
+                        <tr>
+                            <th class="text-center" scope="row">{{ team.rank }}</th>
+                            <th class="text-center"><img src="{{ team.team_logo_server }}" style='width:2rem'> <p class="teamName mb-0">
+                                {{ team.team_name }}</p></th>
+                            <th class="text-center">{{ team.points }}</th>
+                            <th class="text-center">{{ team.played }}</th>
+                            <th class="text-center">{{ team.win }}</th>
+                            <th class="text-center">{{ team.draw }}</th>
+                            <th class="text-center">{{ team.lose }}</th>
+                            <th class="text-center">{{ team.goals_diff }}</th>
+                            <th class="text-center">{{ team.recent }}</th>
+                            {% if not team.uefa == Null %}
+                            <th class="text-center"><i href="#" class="fa-solid fa-circle-question" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{{ team.uefa }}"></i></th>
+                            {% endif %}
+                        </tr>
+
+                    {% endfor %}
+                </tbody>
+              </table>
+              <div id="plUpdateTime"><p>업데이트 : {{ sa_standings.first.updated_from_server }}</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <style>
+          .team-bg {
+            position: relative;
+            justify-content: center;
+            align-items: center;
+            vertical-align: middle;
+            background-position: center;
+            background-size: contain;
+            background-repeat: no-repeat;
+          }
+
+          .team-bg p {
+            position: relative;
+            z-index: 100;
+            color: rgba(255, 255, 255, 1);
+            font-weight: 600;
+            margin-bottom: 0px;
+          }
+
+          .team-bg::before {
+            position: absolute;
+            content: "";
+            top: 0px;
+            left: 0px;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+          }
+
+          @media screen and (max-width: 540px) {
+        .teamName {
+          display: none;
+        }
+      }
+    </style>
+{% endblock %}
+
+{% block script %}
+    <script>
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    </script>
+{% endblock %}

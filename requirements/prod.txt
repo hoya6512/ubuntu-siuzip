@@ -1,0 +1,8 @@
+-r common.txt
+
+psycopg2
+
+gunicorn
+
+uvicorn[standard]
+

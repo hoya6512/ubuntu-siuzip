@@ -1,0 +1,71 @@
+{% extends "accounts/base.html" %}
+
+{% block content %}
+
+    <ul class="nav nav-tabs mt-5" id="myTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a class="nav-link fs-5 active" href="{% url 'accounts:profile' %}" type="button" role="tab">프로필</a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link fs-5"  href="{% url 'accounts:profile_posted' %}" type="button" role="tab">게시한 글</a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link fs-5"  href="{% url 'accounts:profile_commented' %}" type="button" role="tab">댓글</a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link fs-5"  href="{% url 'accounts:profile_reply' %}" type="button" role="tab">대댓글</a>
+      </li>
+
+    </ul>
+    <div class="tab-content p-3 border-bottom border-start border-end rounded-bottom-3">
+      <table class="table table-hover">
+          <tbody>
+            <tr>
+                <th class="align-middle">아이디</th>
+                <th class="align-middle">{{ user.username }}</th>
+                <th class="align-middle">
+                    {% if user.is_superuser %}
+                    (관리자)
+                    {% elif user.is_staff %}
+                    (스태프)
+                    {% else %}
+                    (사용자)
+                    {% endif %}
+                </th>
+            </tr>
+            <tr>
+                <th class="align-middle">비밀번호</th>
+                <th class="align-middle"></th>
+                <th class="align-middle">
+                     <a class="btn btn-outline-secondary" href="{% url 'accounts:password_edit' %}">비밀번호 변경</a>
+                </th>
+            </tr>
+            <tr>
+                <th class="align-middle">닉네임</th>
+                <th class="align-middle">
+                    {{ user.nick_name }}
+                </th>
+                <th class="align-middle">
+                    <a class="btn btn-outline-secondary" href="{% url 'accounts:user_edit' %}">닉네임 수정</a>
+                </th>
+            </tr>
+            <tr>
+                <th class="align-middle">사진</th>
+                <th class="align-middle">
+                    {% if user.profile.avatar %}
+                        <img src="{{ user.profile.avatar.url }}"
+                             alt="{{ user }}'s avatar"
+                             class="rounded-circle img-fluid"
+                             style="width:50px"
+                        />
+                    {% endif %}
+                </th>
+                <th class="align-middle">
+                    <a class="btn btn-outline-secondary" href="{% url 'accounts:profile_edit' %}">사진 수정</a>
+                </th>
+            </tr>
+          </tbody>
+      </table>
+    </div>
+
+{% endblock %}

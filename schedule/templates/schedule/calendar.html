@@ -1,0 +1,46 @@
+{% extends "schedule/base.html" %}
+{% load blog_filter %}
+
+{% block content %}
+    <div class="d-flex justify-content-between p-3">
+        <a type=button class="btn btn-outline-secondary" href="{% url 'schedule:calendar' %}?{{ prev_month }}"> ◀ 이전달 </a>
+        <a type=button class="btn btn-primary" href="{% url 'schedule:event_new' %}"><i class="fa-solid fa-calendar-days"></i> 새일정 등록 </a>
+        <a type=button class="btn btn-outline-secondary" href="{% url 'schedule:calendar' %}?{{ next_month }}"> 다음달 ▶ </a>
+    </div>
+
+        {{ calendar|mark }}
+
+    <style>
+
+
+
+
+        .calendar th {
+          padding: 10px;
+          text-align: center;
+
+        }
+
+        .calendar td {
+          width: 130px;
+          height: 130px;
+          padding: 10px 0px 0px 10px;
+        }
+
+        .month {
+          font-size: 25px;
+        }
+
+        .date {
+          font-size: 16px;
+        }
+
+        ul {
+          padding: 0px 5px 0px 5px;
+            list-style-type: none;
+        }
+
+
+
+    </style>
+{% endblock %}

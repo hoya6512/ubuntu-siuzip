@@ -1,5 +1,5 @@
 {% extends "blog/base.html" %}
-{% load blog_filter %}
+{% load blog_filter static %}
 
 {% block content %}
 
@@ -29,7 +29,7 @@
                         {% if post.author.profile.avatar %}
                             src="{{ post.author.profile.avatar.url }}"
                         {% else %}
-                            src="/media/guest_avatar(32px).png"
+                            src="{% static 'image/icon-image-not-found.jpg' %}"
                         {% endif %}
                     style="width: 1em; height: 1em"
                     alt="{{ post.author.nick_name }}'s avatar"/>
@@ -156,7 +156,7 @@
                     {% if comment.author.profile.avatar %}
                         src="{{ comment.author.profile.avatar.url }}"
                     {% else %}
-                        src="/media/guest_avatar(32px).png"
+                        src="{% static 'image/icon-image-not-found.jpg' %}"
                     {% endif %}
                 style="width: 25px; height: 25px"
                 alt="{{ comment.author.nick_name }}'s avatar"/>
@@ -239,7 +239,7 @@
                             {% if reply.author.profile.avatar %}
                                 src="{{ reply.author.profile.avatar.url }}"
                             {% else %}
-                                src="/media/guest_avatar(32px).png"
+                                src="{% static 'image/guest_avatar(32px).png' %}"
                             {% endif %}
                         style="width: 25px; height: 25px"
                         alt="{{ reply.author.nick_name }}'s avatar"/>

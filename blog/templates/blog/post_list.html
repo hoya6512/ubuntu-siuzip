@@ -1,4 +1,4 @@
-{% load blog_filter %}
+{% load blog_filter static %}
 
 <ul class="blog-list list-group">
     {% if not blog_list %}
@@ -12,7 +12,7 @@
             {% if blog.thumbnail %}
                 <img class="blog-img img-fluid img-thumbnail" alt="blog thumbnail" src="{{ blog.thumbnail.url }}"/>
             {% else %}
-                <img src="/media/icon-image-not-found.jpg"
+                <img src="{% static 'image/icon-image-not-found.jpg' %}"
                      alt="image not found"
                      class="blog-img img-fluid img-thumbnail"
                 />

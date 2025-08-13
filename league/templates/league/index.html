@@ -1,4 +1,5 @@
 {% extends "blog/base.html" %}
+{% load static %}
 
 {% block content %}
     {% if request.user.is_staff %}
@@ -38,7 +39,7 @@
     {% endif %}
     <div>
         <img
-            src="/media/2025점수판배너.png"
+            src="{% static 'image/2025점수판배너.png' %}"
             alt="banner"
             class="w-100 mb-3"
         />

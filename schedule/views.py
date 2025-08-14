@@ -4,6 +4,8 @@ from django.contrib import messages
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import render, get_object_or_404, redirect
 from datetime import date, datetime, timedelta
+
+from django.utils.decorators import method_decorator
 from django.utils.safestring import mark_safe
 from django.views import generic
 import calendar
@@ -15,6 +17,21 @@ from schedule.models import Event
 from schedule.utils import Calendar
 
 
+def staff_required(func):
+    def wrap(request, *args, **kwargs):
+        if not request.user.is_staff:
+            if request.META.get("HTTP_REFERER"):
+                messages.error(request, "Staff이상 사용자만 접근이 가능합니다.")
+                return redirect(request.META["HTTP_REFERER"])
+            else:
+                messages.error(request, "Staff이상 사용자만 접근이 가능합니다.")
+                return redirect(reverse_lazy("core:root"))
+        return func(request, *args, **kwargs)
+
+    return wrap
+
+
+@method_decorator(staff_required, name="dispatch")
 class CalendarView(ListView):
     model = Event
     template_name = "schedule/calendar.html"
@@ -61,6 +78,7 @@ def next_month(d):
     return month
 
 
+@method_decorator(staff_required, name="dispatch")
 class EventCreateView(LoginRequiredMixin, CreateView):
     model = Event
     form_class = EventForm
@@ -80,6 +98,7 @@ class EventCreateView(LoginRequiredMixin, CreateView):
 event_new = EventCreateView.as_view()
 
 
+@method_decorator(staff_required, name="dispatch")
 class EventDetailView(DetailView):
     model = Event
 

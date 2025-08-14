@@ -3,7 +3,7 @@
 
 {% block content %}
     {% if request.user.is_staff %}
-        <table class="w-100">
+        <table class="w-100 mt-3">
             <tbody>
                 <tr>
                     <td colspan="2">
@@ -37,7 +37,7 @@
         </table>
 
     {% endif %}
-    <div>
+    <div class="mt-3">
         <img
             src="{% static 'image/2025점수판배너.png' %}"
             alt="banner"

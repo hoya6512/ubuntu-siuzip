@@ -156,6 +156,7 @@ def password_edit(request):
     )
 
 
+@login_required
 def profile_posted(request):
 
     posts = Post.objects.filter(author=request.user)
@@ -171,6 +172,7 @@ def profile_posted(request):
     return render(request, "accounts/profile_posted.html", context)
 
 
+@login_required
 def profile_commented(request):
 
     comments = Comment.objects.filter(author=request.user)
@@ -186,6 +188,7 @@ def profile_commented(request):
     return render(request, "accounts/profile_commented.html", context)
 
 
+@login_required
 def profile_reply(request):
 
     replies = Reply.objects.filter(author=request.user)

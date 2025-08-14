@@ -5,12 +5,11 @@
             <div class="container">
                 <a class="navbar-brand" href="/" style="color: white; font-weight: 900">
                     <img
-                        src="{% static 'image/favicon.png' %}"
+                        src="{% static 'image/siuzip banner.png' %}"
                         alt="Siuzip.com"
-                        width="32px"
-                        height="32px"
+                        height="40px"
                     />
-                시우네</a>
+                </a>
                 <button
                   class="navbar-toggler"
                   type="button"
@@ -43,24 +42,24 @@
                     </div>
                     <div class="offcanvas-body" style="background-color: #3b5998">
                         <ul class="navbar-nav justify-content-end flex-grow-1">
-                            <li class="nav-item">
+                            <li class="nav-item align-content-center">
                                 <a class="nav-link active" href="/">HOME</a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item align-content-center">
                                 <a class="nav-link active" href="{% url 'blog:index' %}">BLOG</a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item align-content-center">
                                 <a class="nav-link active" href="{% url 'league:league_standings' %}">4대리그</a>
                             </li>
                             <li>
-                                <a class="nav-link">|</a>
+                                <a class="nav-link align-content-center">|</a>
                             </li>
 
                         {% if user.is_staff or user.is_superuser %}
-                            <li class="nav-item">
+                            <li class="nav-item align-content-center">
                                 <a class="nav-link active" href="{% url 'memo:index_status' 'True' %}">MEMO</a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item align-content-center">
                                 <a class="nav-link active" href="{% url 'schedule:calendar' %}">SCHEDULE</a>
                             </li>
                             <li>
@@ -70,7 +69,7 @@
 
 
                             {% if user.is_authenticated %}
-                                <li class="nav-item me-2">
+                                <li class="nav-item me-2 align-content-center">
                                     <a class="nav-link active" href="{% url 'accounts:profile' %}">
                                         {% if user.profile.avatar %}
                                             <img src="{{ user.profile.avatar.url }}"
@@ -87,7 +86,7 @@
                                         {{ user.nick_name }}
                                     </a>
                                 </li>
-                                <li class="nav-item">
+                                <li class="nav-item align-content-center">
                                     <a class="nav-link active"
                                        hx-post="{% url 'accounts:logout' %}?next={{ request.path }}"
                                        hx-target="body"
@@ -95,14 +94,14 @@
                                     >LOGOUT</a>
                                 </li>
                             {% else %}
-                                <li class="nav-item">
+                                <li class="nav-item align-content-center">
                                     {% url 'accounts:login' as login_url %}
                                     <a class="nav-link active"
                                        href="{{ login_url }}{% if login_url != request.path %}?next={{ request.path }}{% endif %}"
                                        style="cursor: pointer">LOGIN
                                     </a>
                                 </li>
-                                <li class="nav-item">
+                                <li class="nav-item align-content-center">
                                     <a class="nav-link active"
                                        href="{% url 'accounts:signup' %}?next={{ request.path }}"
                                        style="cursor: pointer">SIGN-UP

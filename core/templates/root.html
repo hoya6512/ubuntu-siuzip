@@ -1,25 +1,115 @@
 {% extends 'base.html' %}
-{#{% load component_tags %}#}
+
 
 {% block content %}
-{#	<div class="w-50" id="wg-api-football-standings"#}
-{#        data-host="v3.football.api-sports.io"#}
-{#        data-key="52d1b79add89f9d721330e87e2ca76d3"#}
-{#        data-league="39"#}
-{#        data-team=""#}
-{#        data-season="2024"#}
-{#        data-theme="grey"#}
-{#        data-show-errors="false"#}
-{#        data-show-logos="true"#}
-{#        class="wg_loader">#}
-{#    </div>#}
+  <div class="container">
+      <div class="row mt-3">
+          <div class="col-6"><a href="{% url 'blog:index' %}" title="Button push blue/green" class="button btnPush btnBlueGreen align-content-center">
+              <p class="fs-1"><i class="fa-solid fa-blog"></i></p>
+              <p class="fs-1">블로그</p>
+              <p class="fs-2">BLOG</p>
+          </a></div>
+          <div class="col-6"><a href="{% url 'league:league_standings' %}" title="Button push lightblue" class="button btnPush btnLightBlue align-content-center">
+              <p class="fs-1"><i class="fa-solid fa-futbol"></i></p>
+              <p class="fs-1">4대리그</p>
+              <p class="fs-2">LEAGUE</p>
+          </a></div>
+          <div class="col-6"><a href="{% url 'memo:index_status' 'True' %}" title="Button push orange" class="button btnPush btnOrange align-content-center">
+              <p class="fs-1"><i class="fa-solid fa-note-sticky"></i></p>
+              <p class="fs-1">메모</p>
+              <p class="fs-2">MEMO</p>
+          </a></div>
+          <div class="col-6"><a href="{% url 'schedule:calendar' %}" title="Button push purple" class="button btnPush btnPurple align-content-center">
+              <p class="fs-1"><i class="fa-solid fa-calendar"></i></p>
+              <p class="fs-1">스케쥴</p>
+              <p class="fs-2">TODO</p>
+          </a></div>
+      </div>
 
 
+
+
+  </div>
+
+    </div>
+
+    <style>
+        a,
+        a:visited {
+          text-decoration: none;
+          color: #00AE68;
+        }
+        a.button {
+          display: block;
+          position: relative;
+          float: left;
+          width: 100%;
+          height: 30vh;
+          padding: 0;
+          margin: 10px 20px 10px 0;
+          font-weight: 600;
+          text-align: center;
+          line-height: 50px;
+          color: #FFF;
+          border-radius: 5px;
+          transition: all 0.2s ;
+        }
+
+        .btnBlueGreen {
+          background: #00AE68;
+        }
+
+        .btnLightBlue {
+          background: #5DC8CD;
+        }
+
+        .btnOrange {
+          background: #FFAA40;
+        }
+
+        .btnPurple {
+          background: #A74982;
+        }
+        /* 3D */
+        .btnBlueGreen.btnPush {
+          box-shadow: 0px 5px 0px 0px #007144;
+        }
+
+        .btnLightBlue.btnPush {
+          box-shadow: 0px 5px 0px 0px #1E8185;
+        }
+
+        .btnOrange.btnPush {
+          box-shadow: 0px 5px 0px 0px #A66615;
+        }
+
+        .btnPurple.btnPush {
+          box-shadow: 0px 5px 0px 0px #6D184B;
+        }
+
+        .btnPush:hover {
+          margin-top: 15px;
+          margin-bottom: 5px;
+        }
+
+        .btnBlueGreen.btnPush:hover {
+          box-shadow: 0px 0px 0px 0px #007144;
+        }
+
+        .btnLightBlue.btnPush:hover {
+          box-shadow: 0px 0px 0px 0px #1E8185;
+        }
+
+        .btnOrange.btnPush:hover {
+          box-shadow: 0px 0px 0px 0px #A66615;
+        }
+
+        .btnPurple.btnPush:hover {
+          box-shadow: 0px 0px 0px 0px #6D184B;
+        }
+    </style>
 {% endblock %}
 
 {% block script %}
-{#<script#}
-{#    type="module"#}
-{#    src="https://widgets.api-sports.io/2.0.3/widgets.js">#}
-{#</script>#}
+
 {% endblock %}

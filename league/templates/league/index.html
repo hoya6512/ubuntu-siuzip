@@ -83,25 +83,25 @@
                 <th class="text-center" scope="col"></th>
                 <th class="text-center" scope="col">
                   <img
-                    src="https://media-3.api-sports.io/football/leagues/39.png"
+                    src="{% static 'image/logo/league/39.png' %}"
                     style="width: 1rem"
                   />PL
                 </th>
                 <th class="text-center" scope="col">
                   <img
-                    src="https://media-3.api-sports.io/football/leagues/140.png"
+                    src="{% static 'image/logo/league/140.png' %}"
                     style="width: 1rem"
                   />LL
                 </th>
                 <th class="text-center" scope="col">
                   <img
-                    src="https://media-3.api-sports.io/football/leagues/78.png"
+                    src="{% static 'image/logo/league/78.png' %}"
                     style="width: 1rem"
                   />BL
                 </th>
                 <th class="text-center" scope="col">
                   <img
-                    src="https://media-3.api-sports.io/football/leagues/135.png"
+                    src="{% static 'image/logo/league/135.png' %}"
                     style="width: 1rem"
                   />SA
                 </th>
@@ -114,28 +114,28 @@
                     <tr>
                         <td class="text-center" style="vertical-align: middle">{{ player.name }}</td>
                         <td class="text-center team-bg" style="
-                        background-image: url({{ player.pl_team.team_logo_server }});">
+                        background-image: url({% static 'image/logo/team/'|add:player.pl_team.team_id%}.png);">
                             <p class="fs-6">{{ player.pl_team.win }}/{{ player.pl_team.draw }}/{{ player.pl_team.lose }}({{ player.pl_team.goals_diff }})</p>
                             <p class="fs-5">{{ player.pl_team.points }}점</p>
                             <p class="fs-6">{{ player.pl_team.recent }}</p>
                             <p class="small">(POT {{ player.pl_pot }})</p>
                         </td>
                         <td class="text-center team-bg" style="
-                        background-image: url({{ player.ll_team.team_logo_server }});">
+                        background-image: url({% static 'image/logo/team/'|add:player.ll_team.team_id%}.png);">
                             <p class="fs-6">{{ player.ll_team.win }}/{{ player.ll_team.draw }}/{{ player.ll_team.lose }}({{ player.ll_team.goals_diff }})</p>
                             <p class="fs-5">{{ player.ll_team.points }}점</p>
                             <p class="fs-6">{{ player.ll_team.recent }}</p>
                             <p class="small">(POT {{ player.ll_pot }})</p>
                         </td>
                         <td class="text-center team-bg" style="
-                        background-image: url({{ player.bl_team.team_logo_server }});">
+                        background-image: url({% static 'image/logo/team/'|add:player.bl_team.team_id%}.png);">
                             <p class="fs-6">{{ player.bl_team.win }}/{{ player.bl_team.draw }}/{{ player.bl_team.lose }}({{ player.bl_team.goals_diff }})</p>
                             <p class="fs-5">{{ player.bl_team.points }}점</p>
                             <p class="fs-6">{{ player.bl_team.recent }}</p>
                             <p class="small">(POT {{ player.bl_pot }})</p>
                         </td>
                         <td class="text-center team-bg" style="
-                        background-image: url({{ player.sa_team.team_logo_server }});">
+                        background-image: url({% static 'image/logo/team/'|add:player.sa_team.team_id%}.png);">
                             <p class="fs-6">{{ player.sa_team.win }}/{{ player.sa_team.draw }}/{{ player.sa_team.lose }}({{ player.sa_team.goals_diff }})</p>
                             <p class="fs-5">{{ player.sa_team.points }}점</p>
                             <p class="fs-6">{{ player.sa_team.recent }}</p>
@@ -163,7 +163,7 @@
                 type="button"
               >
                 <img
-                  src="https://media-3.api-sports.io/football/leagues/39.png"
+                  src="{% static 'image/logo/league/39.png' %}"
                   style="width: 1rem"
                 />
                 PL
@@ -180,7 +180,7 @@
                 type="button"
               >
                 <img
-                  src="https://media-3.api-sports.io/football/leagues/140.png"
+                  src="{% static 'image/logo/league/140.png' %}"
                   style="width: 1rem"
                 />
                 LL
@@ -197,7 +197,7 @@
                 type="button"
               >
                 <img
-                  src="https://media-3.api-sports.io/football/leagues/78.png"
+                  src="{% static 'image/logo/league/78.png' %}"
                   style="width: 1rem"
                 />
                 BL
@@ -214,7 +214,7 @@
                 type="button"
               >
                 <img
-                  src="https://media-3.api-sports.io/football/leagues/135.png"
+                  src="{% static 'image/logo/league/135.png' %}"
                   style="width: 1rem"
                 />
                 SA
@@ -247,7 +247,7 @@
                     {% for team in pl_standings %}
                         <tr>
                             <th class="text-center" scope="row">{{ team.rank }}</th>
-                            <th class="text-center"><img src="{{ team.team_logo_server }}" style='width:2rem'> <p class="teamName mb-0">
+                            <th class="text-center"><img src="{% static 'image/logo/team/'|add:team.team_id%}.png" style='width:2rem'> <p class="teamName mb-0">
                                 {{ team.team_name }}</p></th>
                             <th class="text-center">{{ team.points }}</th>
                             <th class="text-center">{{ team.played }}</th>
@@ -291,7 +291,7 @@
                     {% for team in ll_standings %}
                         <tr>
                             <th class="text-center" scope="row">{{ team.rank }}</th>
-                            <th class="text-center"><img src="{{ team.team_logo_server }}" style='width:2rem'> <p class="teamName mb-0">
+                            <th class="text-center"><img src="{% static 'image/logo/team/'|add:team.team_id%}.png" style='width:2rem'> <p class="teamName mb-0">
                                 {{ team.team_name }}</p></th>
                             <th class="text-center">{{ team.points }}</th>
                             <th class="text-center">{{ team.played }}</th>
@@ -335,7 +335,7 @@
                     {% for team in bl_standings %}
                         <tr>
                             <th class="text-center" scope="row">{{ team.rank }}</th>
-                            <th class="text-center"><img src="{{ team.team_logo_server }}" style='width:2rem'> <p class="teamName mb-0">
+                            <th class="text-center"><img src="{% static 'image/logo/team/'|add:team.team_id%}.png" style='width:2rem'> <p class="teamName mb-0">
                                 {{ team.team_name }}</p></th>
                             <th class="text-center">{{ team.points }}</th>
                             <th class="text-center">{{ team.played }}</th>
@@ -378,7 +378,7 @@
                     {% for team in sa_standings %}
                         <tr>
                             <th class="text-center" scope="row">{{ team.rank }}</th>
-                            <th class="text-center"><img src="{{ team.team_logo_server }}" style='width:2rem'> <p class="teamName mb-0">
+                            <th class="text-center"><img src="{% static 'image/logo/team/'|add:team.team_id%}.png" style='width:2rem'> <p class="teamName mb-0">
                                 {{ team.team_name }}</p></th>
                             <th class="text-center">{{ team.points }}</th>
                             <th class="text-center">{{ team.played }}</th>

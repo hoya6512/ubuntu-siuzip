@@ -18,3 +18,6 @@ class Event(models.Model):
 
         url = reverse("schedule:event_detail", args=(self.id,))
         return f'<a class="badge bg-secondary link-offset-2 link-underline link-underline-opacity-0" href="{url}"> {self.title} </a>'
+
+    def __str__(self):
+        return "%s - %s" % (self.author, self.title)

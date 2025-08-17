@@ -15,7 +15,7 @@ class TagAdmin(admin.ModelAdmin):
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ["title"]
+    pass
 
 
 @admin.register(Comment)

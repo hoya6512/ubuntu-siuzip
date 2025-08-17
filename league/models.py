@@ -24,7 +24,7 @@ class PremierLeague(models.Model):
         upload_to=uuid_name_upload_to,
     )
     team_id = models.CharField("팀ID", max_length=120, unique=True)
-    rank = models.CharField("순위", max_length=120)
+    rank = models.IntegerField("순위")
     played = models.IntegerField("경기")
     points = models.IntegerField("승점")
     win = models.IntegerField("승")
@@ -41,6 +41,9 @@ class PremierLeague(models.Model):
 
     def __str__(self):
         return "%s - %s" % (self.team_name, self.team_id)
+
+    class Meta:
+        ordering = ["rank"]
 
 
 class LaLiga(models.Model):
@@ -52,7 +55,7 @@ class LaLiga(models.Model):
         upload_to=uuid_name_upload_to,
     )
     team_id = models.CharField("팀ID", max_length=120, unique=True)
-    rank = models.CharField("순위", max_length=120)
+    rank = models.IntegerField("순위")
     played = models.IntegerField("경기")
     points = models.IntegerField("승점")
     win = models.IntegerField("승")
@@ -69,6 +72,9 @@ class LaLiga(models.Model):
 
     def __str__(self):
         return "%s - %s" % (self.team_name, self.team_id)
+
+    class Meta:
+        ordering = ["rank"]
 
 
 class BundesLiga(models.Model):
@@ -80,7 +86,7 @@ class BundesLiga(models.Model):
         upload_to=uuid_name_upload_to,
     )
     team_id = models.CharField("팀ID", max_length=120, unique=True)
-    rank = models.CharField("순위", max_length=120)
+    rank = models.IntegerField("순위")
     played = models.IntegerField("경기")
     points = models.IntegerField("승점")
     win = models.IntegerField("승")
@@ -97,6 +103,9 @@ class BundesLiga(models.Model):
 
     def __str__(self):
         return "%s - %s" % (self.team_name, self.team_id)
+
+    class Meta:
+        ordering = ["rank"]
 
 
 class SerieA(models.Model):
@@ -108,7 +117,7 @@ class SerieA(models.Model):
         upload_to=uuid_name_upload_to,
     )
     team_id = models.CharField("팀ID", max_length=120, unique=True)
-    rank = models.CharField("순위", max_length=120)
+    rank = models.IntegerField("순위")
     played = models.IntegerField("경기")
     points = models.IntegerField("승점")
     win = models.IntegerField("승")
@@ -125,6 +134,9 @@ class SerieA(models.Model):
 
     def __str__(self):
         return "%s - %s" % (self.team_name, self.team_id)
+
+    class Meta:
+        ordering = ["rank"]
 
 
 class Player(models.Model):
@@ -150,4 +162,7 @@ class Player(models.Model):
     total_goal_diff = models.IntegerField("총득실", default=0)
 
     class Meta:
-        ordering = ["-total_point"]
+        ordering = ["-total_point", "-total_goal_diff"]
+
+    def __str__(self):
+        return "%s" % (self.name)

@@ -1,6 +1,6 @@
 import locale
 from datetime import datetime, timedelta
-from calendar import HTMLCalendar
+from calendar import HTMLCalendar, calendar
 from .models import Event
 
 
@@ -15,7 +15,10 @@ class Calendar(HTMLCalendar):
     # formats a day as a td
     # filter events by day
     def formatday(self, day, events):
-        events_per_day = events.filter(start_time__day=day)
+        # events_per_day = events.filter(start_time__day=day)
+        events_per_day = events.filter(start_time__day__lte=day).filter(
+            end_time__day__gte=day
+        )
         d = ""
         for event in events_per_day:
             d += f"<li> {event.get_html_url} </li>"

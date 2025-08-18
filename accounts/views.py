@@ -159,7 +159,7 @@ def password_edit(request):
 @login_required
 def profile_posted(request):
 
-    posts = Post.objects.filter(author=request.user)
+    posts = Post.objects.filter(author=request.user).order_by("-created_at")
     page = request.GET.get("page", "1")
 
     paginator = Paginator(posts, 5)
@@ -175,7 +175,7 @@ def profile_posted(request):
 @login_required
 def profile_commented(request):
 
-    comments = Comment.objects.filter(author=request.user)
+    comments = Comment.objects.filter(author=request.user).order_by("-created_at")
     page = request.GET.get("page", "1")
 
     paginator = Paginator(comments, 5)
@@ -191,7 +191,7 @@ def profile_commented(request):
 @login_required
 def profile_reply(request):
 
-    replies = Reply.objects.filter(author=request.user)
+    replies = Reply.objects.filter(author=request.user).order_by("-created_at")
     page = request.GET.get("page", "1")
 
     paginator = Paginator(replies, 5)

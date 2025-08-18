@@ -117,28 +117,76 @@
                         background-image: url({% static 'image/logo/team/'|add:player.pl_team.team_id%}.png);">
                             <p class="fs-6">{{ player.pl_team.win }}/{{ player.pl_team.draw }}/{{ player.pl_team.lose }}({{ player.pl_team.goals_diff }})</p>
                             <p class="fs-5">{{ player.pl_team.points }}점</p>
-                            <p class="fs-6">{{ player.pl_team.recent }}</p>
+                            <p class="small" style="word-spacing: -0.25em">
+                                {% if not player.pl_team.recent == None %}
+                                    {% for char in player.pl_team.recent %}
+                                        {% if char == 'W' %}
+                                            <span class="badge rounded-pill text-bg-primary p-0 py-1">승</span>
+                                        {% elif char == 'D' %}
+                                            <span class="badge rounded-pill text-bg-warning p-0 py-1">무</span>
+                                        {% elif char == 'L' %}
+                                            <span class="badge rounded-pill text-bg-danger p-0 py-1">패</span>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            </p>
                             <p class="small">(POT {{ player.pl_pot }})</p>
                         </td>
                         <td class="text-center team-bg" style="
                         background-image: url({% static 'image/logo/team/'|add:player.ll_team.team_id%}.png);">
                             <p class="fs-6">{{ player.ll_team.win }}/{{ player.ll_team.draw }}/{{ player.ll_team.lose }}({{ player.ll_team.goals_diff }})</p>
                             <p class="fs-5">{{ player.ll_team.points }}점</p>
-                            <p class="fs-6">{{ player.ll_team.recent }}</p>
+                            <p class="small" style="word-spacing: -0.25em">
+                                {% if not player.ll_team.recent == None %}
+                                    {% for char in player.ll_team.recent %}
+                                        {% if char == 'W' %}
+                                            <span class="badge rounded-pill text-bg-primary p-0 py-1">승</span>
+                                        {% elif char == 'D' %}
+                                            <span class="badge rounded-pill text-bg-warning p-0 py-1">무</span>
+                                        {% elif char == 'L' %}
+                                            <span class="badge rounded-pill text-bg-danger p-0 py-1">패</span>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            </p>
                             <p class="small">(POT {{ player.ll_pot }})</p>
                         </td>
                         <td class="text-center team-bg" style="
                         background-image: url({% static 'image/logo/team/'|add:player.bl_team.team_id%}.png);">
                             <p class="fs-6">{{ player.bl_team.win }}/{{ player.bl_team.draw }}/{{ player.bl_team.lose }}({{ player.bl_team.goals_diff }})</p>
                             <p class="fs-5">{{ player.bl_team.points }}점</p>
-                            <p class="fs-6">{{ player.bl_team.recent }}</p>
+                            <p class="small" style="word-spacing: -0.25em">
+                                {% if not player.bl_team.recent == None %}
+                                    {% for char in player.bl_team.recent %}
+                                        {% if char == 'W' %}
+                                            <span class="badge rounded-pill text-bg-primary p-0 py-1">승</span>
+                                        {% elif char == 'D' %}
+                                            <span class="badge rounded-pill text-bg-warning p-0 py-1">무</span>
+                                        {% elif char == 'L' %}
+                                            <span class="badge rounded-pill text-bg-danger p-0 py-1">패</span>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            </p>
                             <p class="small">(POT {{ player.bl_pot }})</p>
                         </td>
                         <td class="text-center team-bg" style="
                         background-image: url({% static 'image/logo/team/'|add:player.sa_team.team_id%}.png);">
                             <p class="fs-6">{{ player.sa_team.win }}/{{ player.sa_team.draw }}/{{ player.sa_team.lose }}({{ player.sa_team.goals_diff }})</p>
                             <p class="fs-5">{{ player.sa_team.points }}점</p>
-                            <p class="fs-6">{{ player.sa_team.recent }}</p>
+                            <p class="small" style="word-spacing: -0.25em">
+                                {% if not player.sa_team.recent == None %}
+                                    {% for char in player.sa_team.recent %}
+                                        {% if char == 'W' %}
+                                            <span class="badge rounded-pill text-bg-primary p-0 py-1">승</span>
+                                        {% elif char == 'D' %}
+                                            <span class="badge rounded-pill text-bg-warning p-0 py-1">무</span>
+                                        {% elif char == 'L' %}
+                                            <span class="badge rounded-pill text-bg-danger p-0 py-1">패</span>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            </p>
                             <p class="small">(POT {{ player.sa_pot }})</p>
                         </td>
                     </tr>
@@ -255,7 +303,19 @@
                             <th class="text-center">{{ team.draw }}</th>
                             <th class="text-center">{{ team.lose }}</th>
                             <th class="text-center">{{ team.goals_diff }}</th>
-                            <th class="text-center">{{ team.recent }}</th>
+                            <th class="text-center fs-6" style="word-spacing: -0.25em">
+                                {% if not team.recent == None %}
+                                    {% for char in team.recent %}
+                                        {% if char == 'W' %}
+                                            <span class="badge text-bg-primary p-0 py-1" style="display: inline-block;">승</span>
+                                        {% elif char == 'D' %}
+                                            <span class="badge text-bg-warning p-0 py-1" style="display: inline-block;">무</span>
+                                        {% elif char == 'L' %}
+                                            <span class="badge text-bg-danger p-0 py-1" style="display: inline-block;">패</span>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            </th>
                             {% if not team.uefa == Null %}
                             <th class="text-center"><i href="#" class="fa-solid fa-circle-question" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{{ team.uefa }}"></i></th>
                             {% endif %}
@@ -299,7 +359,19 @@
                             <th class="text-center">{{ team.draw }}</th>
                             <th class="text-center">{{ team.lose }}</th>
                             <th class="text-center">{{ team.goals_diff }}</th>
-                            <th class="text-center">{{ team.recent }}</th>
+                            <th class="text-center" style="word-spacing: -0.25em">
+                                {% if not team.recent == None %}
+                                    {% for char in team.recent %}
+                                        {% if char == 'W' %}
+                                            <span class="badge text-bg-primary p-0 py-1" style="display: inline-block;">승</span>
+                                        {% elif char == 'D' %}
+                                            <span class="badge text-bg-warning p-0 py-1" style="display: inline-block;">무</span>
+                                        {% elif char == 'L' %}
+                                            <span class="badge text-bg-danger p-0 py-1" style="display: inline-block;">패</span>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            </th>
                             {% if not team.uefa == Null %}
                             <th class="text-center"><i href="#" class="fa-solid fa-circle-question" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{{ team.uefa }}"></i></th>
                             {% endif %}
@@ -343,7 +415,19 @@
                             <th class="text-center">{{ team.draw }}</th>
                             <th class="text-center">{{ team.lose }}</th>
                             <th class="text-center">{{ team.goals_diff }}</th>
-                            <th class="text-center">{{ team.recent }}</th>
+                            <th class="text-center" style="word-spacing: -0.25em">
+                                {% if not team.recent == None %}
+                                    {% for char in team.recent %}
+                                        {% if char == 'W' %}
+                                            <span class="badge rounded-pill text-bg-primary p-0 py-1" style="display: inline-block;">승</span>
+                                        {% elif char == 'D' %}
+                                            <span class="badge rounded-pill text-bg-warning p-0 py-1" style="display: inline-block;">무</span>
+                                        {% elif char == 'L' %}
+                                            <span class="badge rounded-pill text-bg-danger p-0 py-1" style="display: inline-block;">패</span>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            </th>
                             {% if not team.uefa == Null %}
                             <th class="text-center"><i href="#" class="fa-solid fa-circle-question" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{{ team.uefa }}"></i></th>
                             {% endif %}
@@ -386,7 +470,19 @@
                             <th class="text-center">{{ team.draw }}</th>
                             <th class="text-center">{{ team.lose }}</th>
                             <th class="text-center">{{ team.goals_diff }}</th>
-                            <th class="text-center">{{ team.recent }}</th>
+                            <th class="text-center" style="word-spacing: -0.25em">
+                                {% if not team.recent == None %}
+                                    {% for char in team.recent %}
+                                        {% if char == 'W' %}
+                                            <span class="badge rounded-pill text-bg-primary p-0 py-1" style="display: inline-block;">승</span>
+                                        {% elif char == 'D' %}
+                                            <span class="badge rounded-pill text-bg-warning p-0 py-1" style="display: inline-block;">무</span>
+                                        {% elif char == 'L' %}
+                                            <span class="badge rounded-pill text-bg-danger p-0 py-1" style="display: inline-block;">패</span>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            </th>
                             {% if not team.uefa == Null %}
                             <th class="text-center"><i href="#" class="fa-solid fa-circle-question" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{{ team.uefa }}"></i></th>
                             {% endif %}

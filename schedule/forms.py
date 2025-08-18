@@ -1,15 +1,18 @@
+from crispy_forms.bootstrap import InlineRadios
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit
-from django.forms import ModelForm, DateInput, DateTimeInput
+from django.forms import ModelForm, DateInput, DateTimeInput, RadioSelect
 from schedule.models import Event
 
 
 class EventForm(ModelForm):
     class Meta:
         model = Event
-        fields = ["title", "content", "start_time", "end_time"]
+
+        fields = ["title", "content", "event_color", "start_time", "end_time"]
         # datetime-local is a HTML5 input type, format to make date time show on fields
         widgets = {
+            "event_color": RadioSelect,
             "start_time": DateTimeInput(
                 attrs={"type": "datetime-local"}, format="%Y-%m-%dT%H:%M"
             ),

@@ -11,6 +11,14 @@ from django.views.generic import CreateView
 from league.form import PlayerForm
 from league.models import PremierLeague, LaLiga, BundesLiga, SerieA, Player
 
+league_dict = {39: "프리미어리그", 140: "라리가", 78: "분데스리가", 135: "세리에A"}
+league_dict_for_query = {
+    39: PremierLeague,
+    140: LaLiga,
+    78: BundesLiga,
+    135: SerieA,
+}
+
 
 def index(request):
     pass
@@ -35,25 +43,31 @@ def league_standings(request):
 
 
 def create_league_data(request, league_id):
-    conn = http.client.HTTPSConnection("v3.football.api-sports.io")
-    headers = {
-        "x-rapidapi-host": "v3.football.api-sports.io",
-        "x-rapidapi-key": "52d1b79add89f9d721330e87e2ca76d3",
-    }
-    conn.request(
-        "GET", "/standings?league=" + str(league_id) + "&season=2025", headers=headers
-    )
 
-    res = conn.getresponse()
-    data = res.read()
+    if league_dict_for_query[league_id].objects.exists():
+        messages.error(
+            request,
+            league_dict[league_id] + " 데이터 생성 불가(기존 데이터 삭제 후 생성 필요)",
+        )
+    else:
+        conn = http.client.HTTPSConnection("v3.football.api-sports.io")
+        headers = {
+            "x-rapidapi-host": "v3.football.api-sports.io",
+            "x-rapidapi-key": "52d1b79add89f9d721330e87e2ca76d3",
+        }
+        conn.request(
+            "GET",
+            "/standings?league=" + str(league_id) + "&season=2025",
+            headers=headers,
+        )
 
-    get_json = json.loads(data)["response"][0]["league"]["standings"][0]
+        res = conn.getresponse()
+        data = res.read()
 
-    league_dict = {39: "프리미어리그", 140: "라리가", 78: "분데스리가", 135: "세리에A"}
+        get_json = json.loads(data)["response"][0]["league"]["standings"][0]
 
-    for team_data in get_json:
-        if league_id == 39:
-            PremierLeague.objects.create(
+        for team_data in get_json:
+            league_dict_for_query[league_id].objects.create(
                 rank=team_data["rank"],
                 team_name=team_data["team"]["name"],
                 team_logo_server=team_data["team"]["logo"],
@@ -70,62 +84,7 @@ def create_league_data(request, league_id):
                 uefa=team_data["description"],
                 updated_from_server=team_data["update"],
             )
-        elif league_id == 140:
-            LaLiga.objects.create(
-                rank=team_data["rank"],
-                team_name=team_data["team"]["name"],
-                team_logo_server=team_data["team"]["logo"],
-                team_id=team_data["team"]["id"],
-                played=team_data["all"]["played"],
-                points=team_data["points"],
-                win=team_data["all"]["win"],
-                draw=team_data["all"]["draw"],
-                lose=team_data["all"]["lose"],
-                goals_for=team_data["all"]["goals"]["for"],
-                goals_against=team_data["all"]["goals"]["against"],
-                goals_diff=team_data["goalsDiff"],
-                recent=team_data["form"],
-                uefa=team_data["description"],
-                updated_from_server=team_data["update"],
-            )
-        elif league_id == 78:
-            BundesLiga.objects.create(
-                rank=team_data["rank"],
-                team_name=team_data["team"]["name"],
-                team_logo_server=team_data["team"]["logo"],
-                team_id=team_data["team"]["id"],
-                played=team_data["all"]["played"],
-                points=team_data["points"],
-                win=team_data["all"]["win"],
-                draw=team_data["all"]["draw"],
-                lose=team_data["all"]["lose"],
-                goals_for=team_data["all"]["goals"]["for"],
-                goals_against=team_data["all"]["goals"]["against"],
-                goals_diff=team_data["goalsDiff"],
-                recent=team_data["form"],
-                uefa=team_data["description"],
-                updated_from_server=team_data["update"],
-            )
-        elif league_id == 135:
-            SerieA.objects.create(
-                rank=team_data["rank"],
-                team_name=team_data["team"]["name"],
-                team_logo_server=team_data["team"]["logo"],
-                team_id=team_data["team"]["id"],
-                played=team_data["all"]["played"],
-                points=team_data["points"],
-                win=team_data["all"]["win"],
-                draw=team_data["all"]["draw"],
-                lose=team_data["all"]["lose"],
-                goals_for=team_data["all"]["goals"]["for"],
-                goals_against=team_data["all"]["goals"]["against"],
-                goals_diff=team_data["goalsDiff"],
-                recent=team_data["form"],
-                uefa=team_data["description"],
-                updated_from_server=team_data["update"],
-            )
-
-    messages.success(request, league_dict[league_id] + " 데이터 생성 완료.")
+        messages.success(request, league_dict[league_id] + " 데이터 생성 완료.")
     return redirect("league:league_standings")
 
 
@@ -153,71 +112,23 @@ def update_league_data(request, league_id):
 
     get_json = json.loads(data)["response"][0]["league"]["standings"][0]
 
-    league_dict = {39: "프리미어리그", 140: "라리가", 78: "분데스리가", 135: "세리에A"}
-
     for team_data in get_json:
-
-        if league_id == 39:
-            PremierLeague.objects.filter(team_id=team_data["team"]["id"]).update(
-                rank=team_data["rank"],
-                points=team_data["points"],
-                played=team_data["all"]["played"],
-                win=team_data["all"]["win"],
-                draw=team_data["all"]["draw"],
-                lose=team_data["all"]["lose"],
-                goals_for=team_data["all"]["goals"]["for"],
-                goals_against=team_data["all"]["goals"]["against"],
-                goals_diff=team_data["goalsDiff"],
-                recent=team_data["form"],
-                uefa=team_data["description"],
-                updated_from_server=team_data["update"],
-            )
-        elif league_id == 140:
-            LaLiga.objects.filter(team_id=team_data["team"]["id"]).update(
-                rank=team_data["rank"],
-                points=team_data["points"],
-                played=team_data["all"]["played"],
-                win=team_data["all"]["win"],
-                draw=team_data["all"]["draw"],
-                lose=team_data["all"]["lose"],
-                goals_for=team_data["all"]["goals"]["for"],
-                goals_against=team_data["all"]["goals"]["against"],
-                goals_diff=team_data["goalsDiff"],
-                recent=team_data["form"],
-                uefa=team_data["description"],
-                updated_from_server=team_data["update"],
-            )
-        elif league_id == 78:
-            BundesLiga.objects.filter(team_id=team_data["team"]["id"]).update(
-                rank=team_data["rank"],
-                points=team_data["points"],
-                played=team_data["all"]["played"],
-                win=team_data["all"]["win"],
-                draw=team_data["all"]["draw"],
-                lose=team_data["all"]["lose"],
-                goals_for=team_data["all"]["goals"]["for"],
-                goals_against=team_data["all"]["goals"]["against"],
-                goals_diff=team_data["goalsDiff"],
-                recent=team_data["form"],
-                uefa=team_data["description"],
-                updated_from_server=team_data["update"],
-            )
-        elif league_id == 135:
-            SerieA.objects.filter(team_id=team_data["team"]["id"]).update(
-                rank=team_data["rank"],
-                points=team_data["points"],
-                played=team_data["all"]["played"],
-                win=team_data["all"]["win"],
-                draw=team_data["all"]["draw"],
-                lose=team_data["all"]["lose"],
-                goals_for=team_data["all"]["goals"]["for"],
-                goals_against=team_data["all"]["goals"]["against"],
-                goals_diff=team_data["goalsDiff"],
-                recent=team_data["form"],
-                uefa=team_data["description"],
-                updated_from_server=team_data["update"],
-            )
-
+        league_dict_for_query[league_id].objects.filter(
+            team_id=team_data["team"]["id"]
+        ).update(
+            rank=team_data["rank"],
+            points=team_data["points"],
+            played=team_data["all"]["played"],
+            win=team_data["all"]["win"],
+            draw=team_data["all"]["draw"],
+            lose=team_data["all"]["lose"],
+            goals_for=team_data["all"]["goals"]["for"],
+            goals_against=team_data["all"]["goals"]["against"],
+            goals_diff=team_data["goalsDiff"],
+            recent=team_data["form"],
+            uefa=team_data["description"],
+            updated_from_server=team_data["update"],
+        )
     messages.success(request, league_dict[league_id] + " 업데이트 완료.")
     return redirect("league:league_standings")
 
@@ -316,5 +227,5 @@ def update_player_data(request):
             + player.bl_team.goals_diff
             + player.sa_team.goals_diff,
         )
-    messages.success(request, "플레이어 점수 갱신 완료.")
+    messages.success(request, "플레이어 현황 갱신 완료.")
     return redirect("league:league_standings")

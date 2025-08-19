@@ -1,5 +1,6 @@
 {% load crispy_forms_tags %}
 
+
 <div class="row py-5">
     <div class="col-sm-12">
         <div class="card">
@@ -21,13 +22,15 @@
 
 <style>
     #div_id_event_color fieldset div {
-      display: flex; /* 혹은 inline-flex */
+      display: inline-flex; /* 혹은 inline-flex */
       flex-direction: row; /* 가로 정렬 */
     }
 
     .form-check {
-      margin-right: 10px; /* 라디오 버튼 간격 조정 */
+      margin-right: 30px; /* 라디오 버튼 간격 조정 */
+      padding-left: 0;
     }
+
     .form-check label {
         margin-left: 5px; /* 라디오 버튼과 라벨 사이 간격 조정 */
     }
@@ -35,4 +38,75 @@
     legend {
         font-size : 1rem;
     }
+
+
+    #id_event_color_0[type="radio"], #id_event_color_1[type="radio"], #id_event_color_2[type="radio"], #id_event_color_3[type="radio"], #id_event_color_4[type="radio"], #id_event_color_5[type="radio"] {
+        display: none;
+    }
+
+    #id_event_color_0 ~ label, #id_event_color_1 ~ label, #id_event_color_2 ~ label, #id_event_color_3 ~ label, #id_event_color_4 ~ label, #id_event_color_5 ~ label {
+        width: 80px;
+        padding : 0px 5px 0px 5px;
+        border : 2px solid #ccc;
+        cursor : pointer;
+        border-radius: 10px;
+        text-align: center;
+    }
+
+    #id_event_color_0 ~ label {
+        background-color: #0d6efd;
+        color : white;
+    }
+
+    #id_event_color_0[type="radio"]:checked + label {
+        border-color: blue;
+    }
+
+
+    #id_event_color_1 ~ label {
+        background-color: #6c757d;
+        color : white;
+    }
+
+    #id_event_color_1[type="radio"]:checked + label {
+        border-color: blue;
+    }
+
+    #id_event_color_2 ~ label {
+        background-color: #198754;
+        color : white;
+    }
+
+    #id_event_color_2[type="radio"]:checked + label {
+        border-color: blue;
+    }
+
+    #id_event_color_3 ~ label {
+        background-color: #dc3545;
+        color : white;
+    }
+
+    #id_event_color_3[type="radio"]:checked + label {
+        border-color: blue;
+    }
+
+    #id_event_color_4 ~ label {
+        background-color: #ffc107;
+        color : black;
+    }
+
+    #id_event_color_4[type="radio"]:checked + label {
+        border-color: blue;
+    }
+
+    #id_event_color_5 ~ label {
+        background-color: #0dcaf0;
+        color : black;
+    }
+
+    #id_event_color_5[type="radio"]:checked + label {
+        border-color: blue;
+    }
+
+
 </style>

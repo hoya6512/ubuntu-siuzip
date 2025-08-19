@@ -12,7 +12,11 @@ class EventForm(ModelForm):
         fields = ["title", "content", "event_color", "start_time", "end_time"]
         # datetime-local is a HTML5 input type, format to make date time show on fields
         widgets = {
-            "event_color": RadioSelect,
+            "event_color": RadioSelect(
+                attrs={
+                    "class": "image-radio-buttons",
+                }
+            ),
             "start_time": DateTimeInput(
                 attrs={"type": "datetime-local"}, format="%Y-%m-%dT%H:%M"
             ),

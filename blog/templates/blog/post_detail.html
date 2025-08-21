@@ -10,39 +10,31 @@
             class="row align-items-center p-2 mx-0 mb-2 rounded shadow-sm"
             style="background-color: #8b9dc3"
           >
-            <div class="col-md-10">
-              <h2 style="font-weight: 900; color: white">{{ post.title }}</h2>
-            </div>
-            <div class="col-md-2 text-end">
-                <span class="category py-1 px-2 rounded-pill">{{ post.category }}</span>
+                <div class="col-md-10">
+                  <h2 style="font-weight: 900; color: white">{{ post.title }}</h2>
+                </div>
+                <div class="col-md-2 text-end">
+                    <span class="category py-1 px-2 rounded-pill">{{ post.category }}</span>
 
-            </div>
+                </div>
           </div>
           <div
-            class="row d-flex p-2 mb-2 mx-0 rounded shadow-sm"
+            class="d-flex p-2 mb-2 mx-0 rounded shadow-sm"
             style="background-color: #dfe3ee"
           >
-            <div class="col-6 py-2">
-               <span class="ms-auto p-2" style="font-weight: 600">
-                  <img
-                    class="img-fluid rounded-circle me-2"
-                        {% if post.author.profile.avatar %}
-                            src="{{ post.author.profile.avatar.url }}"
-                        {% else %}
-                            src="{% static 'image/icon-image-not-found.jpg' %}"
-                        {% endif %}
-                    style="width: 1em; height: 1em"
-                    alt="{{ post.author.nick_name }}'s avatar"/>
-                  {{ post.author.nick_name }}
-              </span>
-            </div>
-            <div class="col-6 text-md-end py-2">
-
-              <span class="ms-auto" style="font-weight: 600"
-                >{{ post.created_at|timesince }} 전</span
-              >
-
-            </div>
+                <img
+                  class="img-fluid rounded-circle me-1"
+                  {% if post.author.profile.avatar %}
+                    src="{{ post.author.profile.avatar.url }}"
+                  {% else %}
+                    src="{% static 'image/guest_avatar(32px).png' %}"
+                  {% endif %}
+                  style="width: 3em; height: 3em"
+                  alt="{{ post.author.nick_name }}'s avatar"/>
+                <div class="align-content-center">
+                      <p class="mx-2 mb-0" style="font-weight: 600">{{ post.author.nick_name }}</p>
+                      <p class="mx-2 mb-0 text-secondary" style="font-size: small">{{ post.created_at|date:'Y년 n월 j일 a g:i' }}</p>
+                </div>
           </div>
 
 {#        블로그 내용#}
@@ -137,6 +129,8 @@
             >다음글 ▶<br></button>
         {% endif %}
     </div>
+
+
     <!-- 댓글 표시창 구현 -->
     <div class="container-xl">
         <p class="shadow-sm border rounded border-1 p-3"><i class="fa-regular fa-comment"></i> 댓글 {{ post.comment_set.count }} 개</p>
@@ -146,161 +140,175 @@
         {% else %}
 
         {% for comment in post.comment_set.all %}
-        <li class="list-group-item p-0">
-          <div class="row p-3 mb-2 text-emphasis-secondary">
-            <span class="anchor" id="comment{{ comment.pk }}"></span>
-            <!-- 댓글 작성자 -->
-            <div class="comment-writer col-md-10">
-              <img
-                class="img-fluid rounded-circle me-2"
-                    {% if comment.author.profile.avatar %}
-                        src="{{ comment.author.profile.avatar.url }}"
-                    {% else %}
-                        src="{% static 'image/icon-image-not-found.jpg' %}"
-                    {% endif %}
-                style="width: 25px; height: 25px"
-                alt="{{ comment.author.nick_name }}'s avatar"/>
-                <span>{{ comment.author.nick_name }}</span>
-                {% if comment.author == post.author %}
-                    <span class="badge rounded-pill text-bg-primary align-text-bottom" style="font-size: x-small">작성자</span>
-                {% endif %}
-                <span class="text-secondary" style="font-size: small">{{ comment.updated_at|timesince }} 전</span>
-
-                <a
-                    role="button"
-                    class="btn btn-outline-danger ms-2 p-1"
-                    href="{% url "blog:comment_like" comment.pk %}"
-                    style="font-size: small"
-                >
-                      {% if request.user in comment.like_users.all %}
-                      <i class="fa-solid fa-heart" style="color:red"></i>
-                      {{ comment.like_users.count }}
-                      {% else %}
-                      <i class="fa-regular fa-heart" style="color:red"></i>
-                      {{ comment.like_users.count }}
-                      {% endif %}
-                </a>
-
-                <div
-                class="replyContent my-3"
-              >{{ comment.content }}</div>
-            </div>
-
-            <div class="col-md-2">
-              <div class="btn-group align-items-center w-100" role="group">
-                <button
-                  class="btn btn-outline-primary shadow-sm"
-                  style="font-weight: 600"
-                  role="button"
-                  onclick="location.href='{% url "blog:comment_edit" comment.pk %}'"
-                  {% if request.user != comment.author %}
-                    disabled
-                  {% endif %}
-                >
-                  <i class="fa-solid fa-pen"></i> 수정
-                </button>
-                <button
-                  class="comment-delete btn btn-outline-secondary shadow-sm"
-                  style="font-weight: 600"
-                  href="javascript:void(0)"
-                  data-uri="{% url "blog:comment_delete" comment.pk %}"
-                  {% if request.user != comment.author %}
-                    disabled
-                  {% endif %}
-                >
-                  <i class="fa-solid fa-trash"></i> 삭제
-                </button>
-              </div>
-                <button class="btn btn-outline-dark shadow-sm w-100"
-                        onclick="location.href='{% url "blog:reply_new" comment.pk %}'"
-                        {% if not user.is_authenticated %}
-                            disabled
-                        {% endif %}
-                  style="font-weight: 600"><i class="fa-solid fa-comment"></i> 댓글</button>
-
-            </div>
-          </div>
-        </li>
-{#            대댓글 표시#}
-            {% for reply in comment.reply_set.all %}
-                <li class="list-group-item p-0 bg-body-tertiary">
-                  <div class="row p-3 mb-2">
-                    <span class="anchor" id="reply{{ reply.pk }}"></span>
-                    <!-- 댓글 작성자 -->
-                    <div class="col-1 col-md-1 text-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-return-right" viewBox="0 0 16 16">
-                          <path fill-rule="evenodd" d="M1.5 1.5A.5.5 0 0 0 1 2v4.8a2.5 2.5 0 0 0 2.5 2.5h9.793l-3.347 3.346a.5.5 0 0 0 .708.708l4.2-4.2a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 8.3H3.5A1.5 1.5 0 0 1 2 6.8V2a.5.5 0 0 0-.5-.5"/>
-                        </svg>
-                    </div>
-
-                    <div class="comment-writer col-11 col-md-9">
-                      <img
-                        class="img-fluid rounded-circle me-2"
-                            {% if reply.author.profile.avatar %}
-                                src="{{ reply.author.profile.avatar.url }}"
-                            {% else %}
-                                src="{% static 'image/guest_avatar(32px).png' %}"
-                            {% endif %}
-                        style="width: 25px; height: 25px"
-                        alt="{{ reply.author.nick_name }}'s avatar"/>
-                        <span>{{ reply.author.nick_name }}</span>
-                        {% if reply.author == post.author %}
-                            <span class="badge rounded-pill text-bg-primary align-text-bottom" style="font-size: x-small">작성자</span>
-                        {% endif %}
-                        <span class="text-secondary" style="font-size: small">{{ reply.updated_at|timesince }} 전</span>
-
-                        <a
-                            role="button"
-                            class="btn btn-outline-danger ms-2 p-1"
-                            href="{% url "blog:reply_like" reply.pk %}"
-                            style="font-size: small"
-                        >
-                              {% if request.user in reply.like_users.all %}
-                              <i class="fa-solid fa-heart" style="color:red"></i>
-                              {{ reply.like_users.count }}
-                              {% else %}
-                              <i class="fa-regular fa-heart" style="color:red"></i>
-                              {{ reply.like_users.count }}
-                              {% endif %}
-                        </a>
-
-                        <div class="replyContent my-3">
-                              {{ reply.content }}
+            <li class="list-group-item p-0">
+              <div class="row p-3 mb-2 text-emphasis-secondary">
+                <span class="anchor" id="comment{{ comment.pk }}"></span>
+                <!-- 댓글 작성자 -->
+                <div class="comment-writer col-md-10">
+                    <div class="d-flex">
+                        <img
+                          class="img-fluid rounded-circle me-1"
+                          {% if comment.author.profile.avatar %}
+                            src="{{ comment.author.profile.avatar.url }}"
+                          {% else %}
+                            src="{% static 'image/guest_avatar(32px).png' %}"
+                          {% endif %}
+                          style="width: 3em; height: 3em"
+                          alt="{{ comment.author.nick_name }}'s avatar"/>
+                        <div class="align-content-center">
+                              <p class="mx-2 mb-0" style="font-weight: 600">
+                                  {{ comment.author.nick_name }}
+                                  {% if comment.author == post.author %}
+                                    <span class="badge rounded-pill text-bg-primary align-text-bottom" style="font-size: x-small">작성자</span>
+                                  {% endif %}
+                                  <a
+                                    role="button"
+                                    class="btn btn-outline-danger ms-2 p-1"
+                                    href="{% url "blog:comment_like" comment.pk %}"
+                                    style="font-size: small"
+                                  >
+                                      {% if request.user in comment.like_users.all %}
+                                      <i class="fa-solid fa-heart" style="color:red"></i>
+                                      {{ comment.like_users.count }}
+                                      {% else %}
+                                      <i class="fa-regular fa-heart" style="color:red"></i>
+                                      {{ comment.like_users.count }}
+                                      {% endif %}
+                                  </a>
+                              </p>
+                              <p class="mx-2 mb-0 text-secondary" style="font-size: small">{{ comment.created_at|timesince }} 전</p>
                         </div>
                     </div>
 
+                    <div class="replyContent my-3">{{ comment.content }}</div>
+                </div>
 
 
-                    <div class="col-md-2">
-                      <div class="btn-group align-items-center w-100" role="group">
-                        <button
-                          class="btn btn-outline-primary shadow-sm"
-                          style="font-weight: 600"
-                          role="button"
-                          onclick="location.href='{% url "blog:reply_edit" reply.pk %}'"
-                          {% if request.user != reply.author %}
-                            disabled
-                          {% endif %}
-                        >
-                          <i class="fa-solid fa-pen"></i> 수정
-                        </button>
-                        <button
-                          class="comment-delete btn btn-outline-secondary shadow-sm"
-                          style="font-weight: 600"
-                          href="javascript:void(0)"
-                          data-uri="{% url "blog:reply_delete" reply.pk %}"
-                          {% if request.user != reply.author %}
-                            disabled
-                          {% endif %}
-                        >
-                          <i class="fa-solid fa-trash"></i> 삭제
-                        </button>
-                      </div>
-
-                    </div>
+                 <!-- 댓글 수정 삭제 버튼 -->
+                <div class="col-md-2">
+                  <div class="btn-group align-items-center w-100" role="group">
+                    {% if request.user != comment.author %}
+                          <span class="d-inline-block w-50" tabindex="0" data-bs-toggle="tooltip" data-bs-title="작성자만 수정이 가능합니다.">
+                            <button class="btn btn-outline-primary shadow-sm p-1 w-100" type="button" disabled><i class="fa-solid fa-pen"></i> 수정</button>
+                          </span>
+                          <span class="d-inline-block w-50" tabindex="0" data-bs-toggle="tooltip" data-bs-title="작성자만 삭제가 가능합니다.">
+                            <button class="btn btn-outline-secondary shadow-sm p-1 w-100" type="button" disabled><i class="fa-solid fa-trash"></i> 삭제</button>
+                          </span>
+                      {% else %}
+                          <button class="btn btn-outline-primary shadow-sm"
+                              role="button"
+                              onclick="location.href='{% url "blog:comment_edit" comment.pk %}'"
+                          >
+                              <i class="fa-solid fa-pen"></i> 수정
+                          </button>
+                          <button class="comment-delete btn btn-outline-secondary shadow-sm" role="button"
+                                  href="javascript:void(0)"
+                                  data-uri="{% url "blog:comment_delete" comment.pk %}"
+                          >
+                              <i class="fa-solid fa-trash"></i> 삭제
+                          </button>
+                    {% endif %}
                   </div>
-                </li>
-            {% endfor %}
+                    {% if not user.is_authenticated %}
+                        <span class="d-inline-block w-100" tabindex="0" data-bs-toggle="tooltip" data-bs-title="로그인 후 댓글을 작성해주세요.">
+                            <button class="btn btn-outline-dark shadow-sm w-100" type="button" disabled><i class="fa-solid fa-comment"></i> 댓글</button>
+                        </span>
+                    {% else %}
+                        <button class="btn btn-outline-dark shadow-sm w-100"
+                                onclick="location.href='{% url "blog:reply_new" comment.pk %}'"
+                                style="font-weight: 600">
+                            <i class="fa-solid fa-comment"></i> 댓글
+                        </button>
+                    {% endif %}
+
+                </div>
+              </div>
+            </li>
+                <!-- 대댓글 표시 -->
+                {% for reply in comment.reply_set.all %}
+                    <li class="list-group-item p-0 bg-body-tertiary">
+                      <div class="row p-3 mb-2">
+                        <span class="anchor" id="reply{{ reply.pk }}"></span>
+                        <!-- 대댓글 작성자 -->
+                        <div class="col-1 col-md-1 text-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-return-right" viewBox="0 0 16 16">
+                              <path fill-rule="evenodd" d="M1.5 1.5A.5.5 0 0 0 1 2v4.8a2.5 2.5 0 0 0 2.5 2.5h9.793l-3.347 3.346a.5.5 0 0 0 .708.708l4.2-4.2a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 8.3H3.5A1.5 1.5 0 0 1 2 6.8V2a.5.5 0 0 0-.5-.5"/>
+                            </svg>
+                        </div>
+
+                        <div class="comment-writer col-11 col-md-9">
+                          <!-- 대댓글 작성자 -->
+                          <div class="d-flex">
+                            <img
+                              class="img-fluid rounded-circle me-1"
+                              {% if reply.author.profile.avatar %}
+                                src="{{ reply.author.profile.avatar.url }}"
+                              {% else %}
+                                src="{% static 'image/guest_avatar(32px).png' %}"
+                              {% endif %}
+                              style="width: 3em; height: 3em"
+                              alt="{{ reply.author.nick_name }}'s avatar"/>
+                            <div class="align-content-center">
+                                  <p class="mx-2 mb-0" style="font-weight: 600">
+                                      {{ reply.author.nick_name }}
+                                      {% if reply.author == post.author %}
+                                        <span class="badge rounded-pill text-bg-primary align-text-bottom" style="font-size: x-small">작성자</span>
+                                      {% endif %}
+                                      <a
+                                        role="button"
+                                        class="btn btn-outline-danger ms-2 p-1"
+                                        href="{% url "blog:reply_like" reply.pk %}"
+                                        style="font-size: small"
+                                      >
+                                          {% if request.user in reply.like_users.all %}
+                                            <i class="fa-solid fa-heart" style="color:red"></i>
+                                            {{ reply.like_users.count }}
+                                          {% else %}
+                                            <i class="fa-regular fa-heart" style="color:red"></i>
+                                            {{ reply.like_users.count }}
+                                          {% endif %}
+                                      </a>
+                                  </p>
+                                  <p class="mx-2 mb-0 text-secondary" style="font-size: small">{{ reply.created_at|timesince }} 전</p>
+                            </div>
+                          </div>
+                            <!-- 대댓글 내용 -->
+                            <div class="replyContent my-3">
+                                  {{ reply.content }}
+                            </div>
+                        </div>
+
+
+                        <!-- 대댓글 수정 삭제 버튼 -->
+                        <div class="col-md-2">
+                          <div class="btn-group align-items-center w-100" role="group">
+                            {% if request.user != reply.author %}
+                              <span class="d-inline-block w-50" tabindex="0" data-bs-toggle="tooltip" data-bs-title="작성자만 수정이 가능합니다.">
+                                <button class="btn btn-outline-primary shadow-sm p-1 w-100" type="button" disabled><i class="fa-solid fa-pen"></i> 수정</button>
+                              </span>
+                              <span class="d-inline-block w-50" tabindex="0" data-bs-toggle="tooltip" data-bs-title="작성자만 삭제가 가능합니다.">
+                                <button class="btn btn-outline-secondary shadow-sm p-1 w-100" type="button" disabled><i class="fa-solid fa-trash"></i> 삭제</button>
+                              </span>
+                            {% else %}
+                              <button class="btn btn-outline-primary shadow-sm"
+                                  role="button"
+                                  onclick="location.href='{% url "blog:reply_edit" reply.pk %}'"
+                              >
+                                  <i class="fa-solid fa-pen"></i> 수정
+                              </button>
+                              <button class="comment-delete btn btn-outline-secondary shadow-sm" role="button"
+                                      href="javascript:void(0)"
+                                      data-uri="{% url "blog:reply_delete" reply.pk %}"
+                              >
+                                  <i class="fa-solid fa-trash"></i> 삭제
+                              </button>
+                            {% endif %}
+                          </div>
+
+                        </div>
+                      </div>
+                    </li>
+                {% endfor %}
           {% endfor %}
       {% endif %}
 
@@ -409,6 +417,10 @@ function EmptyCheck(){
 
     return true;
 }
+
+
+const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
 
 </script>

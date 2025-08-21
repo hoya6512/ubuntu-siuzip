@@ -1,5 +1,5 @@
 {% extends "schedule/base.html" %}
-{% load blog_filter static %}
+{% load static weekday_name_short blog_filter %}
 
 {% block content %}
 
@@ -13,29 +13,29 @@
             <div class="col-md-10">
               <h2 style="font-weight: 900; color: white">{{ event.title }}</h2>
             </div>
+            <div class="col-md-2 text-end">
+                <span class="badge rounded-pill {{ event.event_color }} border border-3">　</span>
+            </div>
           </div>
           <div
-            class="row d-flex p-2 mb-2 mx-0 rounded shadow-sm"
+            class="p-2 mb-2 mx-0 rounded shadow-sm"
             style="background-color: #dfe3ee"
           >
-            <div class="col-6 py-2">
-               <span class="ms-auto p-2" style="font-weight: 600">
-                  <img
-                    class="img-fluid rounded-circle me-2"
-                        {% if event.author.profile.avatar %}
-                            src="{{ event.author.profile.avatar.url }}"
-                        {% else %}
-                            src="{% static 'image/guest_avatar(32px).png' %}"
-                        {% endif %}
-                    style="width: 30px; height: 30px"
-                    alt="{{ event.author.nick_name }}'s avatar"/>
-                  {{ event.author.nick_name }}
-              </span>
-            <span class="small text-secondary" style="font-weight: 600"
-                >{{ event.created_at|timesince }} 전</span
-              >
-            </div>
-
+                <div class="d-flex">
+                      <img
+                      class="img-fluid rounded-circle me-2"
+                      {% if event.author.profile.avatar %}
+                        src="{{ event.author.profile.avatar.url }}"
+                      {% else %}
+                        src="{% static 'image/guest_avatar(32px).png' %}"
+                      {% endif %}
+                      style="width: 3em; height: 3em"
+                      alt="{{ event.author.nick_name }}'s avatar"/>
+                      <div class="align-content-center">
+                          <p class="mx-2 mb-0">{{ event.author.nick_name }}</p>
+                          <p class="mx-2 mb-0 text-secondary" style="font-size: small">{{ event.created_at|timesince }} 전</p>
+                      </div>
+                </div>
           </div>
 
             <div
@@ -45,13 +45,13 @@
                 <table class="table table-borderless w-100 text-center">
                   <tr>
                       <td class="align-content-center fs-5" rowspan="2"><i class="fa-regular fa-clock"></i></td>
-                      <td><span class="fs-5">{{ event.start_time|date:'m월 d일 (D)' }}</span></td>
+                      <td><span>{{ event.start_time|date:'n월 j일' }}</span><span>({{ event.start_time|weekday_name_short }})</span></td>
                       <td class="align-content-center fs-5" rowspan="2"><span>~</span></td>
-                      <td><span class="fs-5">{{ event.end_time|date:'m월 d일 (D)' }}</span></td>
+                      <td><span>{{ event.end_time|date:'n월 j일' }}</span><span>({{ event.end_time|weekday_name_short }})</span></td>
                   </tr>
                   <tr>
-                      <td><span class="fs-5">{{ event.start_time|date:'a h:i' }}</span></td>
-                      <td><span class="fs-5">{{ event.end_time|date:'a h:i' }}</span></td>
+                      <td><span>{{ event.start_time|date:'a g:i' }}</span></td>
+                      <td><span>{{ event.end_time|date:'a g:i' }}</span></td>
                   </tr>
                 </table>
             </div>
@@ -61,8 +61,6 @@
             class="p-3 mb-2 text-emphasis-secondary rounded shadow-sm"
             style="background-color: #f7f7f7"
           >
-
-
             {{ event.content|mark }}
           </div>
 

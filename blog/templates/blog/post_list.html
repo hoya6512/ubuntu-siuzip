@@ -20,11 +20,10 @@
         </a>
       </div>
       <div class="col-lg-10">
-        <p class="mb-2 mt-2">
-          <span class="category py-1 px-2 rounded-pill">
-              {{ blog.category }}
-          </span>
+        <p class="my-2">
+            <span class="category py-1 px-2 rounded-pill">{{ blog.category }}</span>
         </p>
+
         <h2 class="title my-3">
           <a
             class="link-body-emphasis link-underline link-underline-opacity-0 link-underline-opacity-0-hover rounded shadow-sm p-3"
@@ -47,14 +46,17 @@
         <div class="detail-info pt-2">
           <div class="detail-info-left">
             <img
-              class="img-fluid rounded-circle"
-              src="{{ blog.author.profile.avatar.url }}"
-              style="width: 40px; height: 40px"
-            />
-            <div class="detail-info-content">
-              <span>{{ blog.author.nick_name }}</span>
-              <span class="text-bar"></span>
-              <span>{{ blog.created_at|date:'Y-m-d a h:i' }}</span>
+              class="img-fluid rounded-circle me-1"
+              {% if blog.author.profile.avatar %}
+                src="{{ blog.author.profile.avatar.url }}"
+              {% else %}
+                src="{% static 'image/guest_avatar(32px).png' %}"
+              {% endif %}
+              style="width: 3em; height: 3em"
+              alt="{{ blog.author.nick_name }}'s avatar"/>
+            <div class="align-content-center">
+                  <p class="mx-2 mb-0">{{ blog.author.nick_name }}</p>
+                  <p class="mx-2 mb-0 text-secondary" style="font-size: small">{{ blog.created_at|date:'Y년 n월 j일 a g:i' }}</p>
             </div>
           </div>
           <div class="detail-info-right">

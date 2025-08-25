@@ -15,3 +15,8 @@ class Memo(models.Model):
 
     class Meta:
         ordering = ["-pk"]
+        verbose_name = "메모"
+        verbose_name_plural = "메모 목록"
+
+    def __str__(self):
+        return "%s - %s" % (self.title, self.author)

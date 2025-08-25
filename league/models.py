@@ -1,21 +1,9 @@
-from os.path import splitext
-from uuid import uuid4
-
 from django.db import models
-from django.utils import timezone
-from django.utils.encoding import force_str
+
+from blog.models import uuid_name_upload_to
 
 
-def uuid_name_upload_to(instance: models.Model, filename: str) -> str:
-    app_label = instance.__class__._meta.app_label
-    cls_name = instance.__class__.__name__.lower()
-    ymd_path = force_str(timezone.now().strftime("%Y/%m/%d/"))
-    extension = splitext(filename)[-1].lower()
-    new_filename = uuid4().hex + extension
-    return "/".join((app_label, cls_name, ymd_path, new_filename))
-
-
-class PremierLeague(models.Model):
+class LeagueStandingModel(models.Model):
     team_name = models.CharField("팀이름", max_length=120)
     team_logo_server = models.URLField("서버로고주소")
     team_logo = models.ImageField(
@@ -40,103 +28,38 @@ class PremierLeague(models.Model):
     updated_at = models.DateTimeField("수정일", auto_now=True)
 
     def __str__(self):
-        return "%s - %s" % (self.team_name, self.team_id)
+        return "(%s)%s[%s]" % (self.rank, self.team_name, self.team_id)
 
     class Meta:
-        ordering = ["rank"]
+        abstract = True
 
 
-class LaLiga(models.Model):
-    team_name = models.CharField("팀이름", max_length=120)
-    team_logo_server = models.URLField("서버로고주소")
-    team_logo = models.ImageField(
-        blank=True,
-        null=True,
-        upload_to=uuid_name_upload_to,
-    )
-    team_id = models.CharField("팀ID", max_length=120, unique=True)
-    rank = models.IntegerField("순위")
-    played = models.IntegerField("경기")
-    points = models.IntegerField("승점")
-    win = models.IntegerField("승")
-    draw = models.IntegerField("무")
-    lose = models.IntegerField("패")
-    goals_for = models.IntegerField("득점")
-    goals_against = models.IntegerField("실점")
-    goals_diff = models.IntegerField("득실")
-    recent = models.CharField("최근경기", max_length=120, blank=True, null=True)
-    uefa = models.CharField("유럽대항전", max_length=120, blank=True, null=True)
-    updated_from_server = models.DateTimeField("업데이트시간", blank=True)
-    created_at = models.DateTimeField("작성일", auto_now_add=True)
-    updated_at = models.DateTimeField("수정일", auto_now=True)
-
-    def __str__(self):
-        return "%s - %s" % (self.team_name, self.team_id)
-
+class PremierLeague(LeagueStandingModel):
     class Meta:
         ordering = ["rank"]
+        verbose_name = "프리미어 리그 팀"
+        verbose_name_plural = "프리미어 리그 팀 목록"
 
 
-class BundesLiga(models.Model):
-    team_name = models.CharField("팀이름", max_length=120)
-    team_logo_server = models.URLField("서버로고주소")
-    team_logo = models.ImageField(
-        blank=True,
-        null=True,
-        upload_to=uuid_name_upload_to,
-    )
-    team_id = models.CharField("팀ID", max_length=120, unique=True)
-    rank = models.IntegerField("순위")
-    played = models.IntegerField("경기")
-    points = models.IntegerField("승점")
-    win = models.IntegerField("승")
-    draw = models.IntegerField("무")
-    lose = models.IntegerField("패")
-    goals_for = models.IntegerField("득점")
-    goals_against = models.IntegerField("실점")
-    goals_diff = models.IntegerField("득실")
-    recent = models.CharField("최근경기", max_length=120, blank=True, null=True)
-    uefa = models.CharField("유럽대항전", max_length=120, blank=True, null=True)
-    updated_from_server = models.DateTimeField("업데이트시간", blank=True)
-    created_at = models.DateTimeField("작성일", auto_now_add=True)
-    updated_at = models.DateTimeField("수정일", auto_now=True)
-
-    def __str__(self):
-        return "%s - %s" % (self.team_name, self.team_id)
-
+class LaLiga(LeagueStandingModel):
     class Meta:
         ordering = ["rank"]
+        verbose_name = "라리가 팀"
+        verbose_name_plural = "라리가 팀 목록"
 
 
-class SerieA(models.Model):
-    team_name = models.CharField("팀이름", max_length=120)
-    team_logo_server = models.URLField("서버로고주소")
-    team_logo = models.ImageField(
-        blank=True,
-        null=True,
-        upload_to=uuid_name_upload_to,
-    )
-    team_id = models.CharField("팀ID", max_length=120, unique=True)
-    rank = models.IntegerField("순위")
-    played = models.IntegerField("경기")
-    points = models.IntegerField("승점")
-    win = models.IntegerField("승")
-    draw = models.IntegerField("무")
-    lose = models.IntegerField("패")
-    goals_for = models.IntegerField("득점")
-    goals_against = models.IntegerField("실점")
-    goals_diff = models.IntegerField("득실")
-    recent = models.CharField("최근경기", max_length=120, blank=True, null=True)
-    uefa = models.CharField("유럽대항전", max_length=120, blank=True, null=True)
-    updated_from_server = models.DateTimeField("업데이트시간", blank=True)
-    created_at = models.DateTimeField("작성일", auto_now_add=True)
-    updated_at = models.DateTimeField("수정일", auto_now=True)
-
-    def __str__(self):
-        return "%s - %s" % (self.team_name, self.team_id)
-
+class BundesLiga(LeagueStandingModel):
     class Meta:
         ordering = ["rank"]
+        verbose_name = "분데스리가 팀"
+        verbose_name_plural = "분데스리가 팀 목록"
+
+
+class SerieA(LeagueStandingModel):
+    class Meta:
+        ordering = ["rank"]
+        verbose_name = "세리에A 팀"
+        verbose_name_plural = "세리에A 팀 목록"
 
 
 class Player(models.Model):
@@ -163,6 +86,8 @@ class Player(models.Model):
 
     class Meta:
         ordering = ["-total_point", "-total_goal_diff"]
+        verbose_name = "참가자"
+        verbose_name_plural = "참가자 목록"
 
     def __str__(self):
         return "%s" % (self.name)

@@ -34,3 +34,8 @@ class Event(models.Model):
 
     def __str__(self):
         return "%s - %s" % (self.author, self.title)
+
+    class Meta:
+        ordering = ["-pk"]
+        verbose_name = "할일"
+        verbose_name_plural = "할일 목록"

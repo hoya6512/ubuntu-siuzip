@@ -93,6 +93,13 @@
                                        hx-push-url="true"
                                     >LOGOUT</a>
                                 </li>
+                                {% if user.is_superuser %}
+                                    <li class="nav-item align-content-center">
+                                        <a class="nav-link active"
+                                           href="admin/"
+                                        >ADMIN</a>
+                                    </li>
+                                {% endif %}
                             {% else %}
                                 <li class="nav-item align-content-center">
                                     {% url 'accounts:login' as login_url %}

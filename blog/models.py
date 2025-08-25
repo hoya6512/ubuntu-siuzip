@@ -15,12 +15,20 @@ class Tag(models.Model):
     def __str__(self):
         return self.tag_name
 
+    class Meta:
+        verbose_name = "태그"
+        verbose_name_plural = "태그 목록"
+
 
 class Category(models.Model):
     category_name = models.CharField("카테고리명", max_length=120, unique=True)
     category_slug = models.SlugField(
         "카테고리 설명", max_length=120, null=True, blank=True, allow_unicode=True
     )
+
+    class Meta:
+        verbose_name = "카테고리"
+        verbose_name_plural = "카테고리 목록"
 
     def __str__(self):
         return self.category_name
@@ -55,6 +63,8 @@ class Post(models.Model):
 
     class Meta:
         ordering = ["-pk"]
+        verbose_name = "포스팅"
+        verbose_name_plural = "포스팅 목록"
 
     def get_absolute_url(self) -> str:
         return reverse("blog:post_detail", args=[self.pk])
@@ -76,6 +86,10 @@ class Comment(models.Model):
     def __str__(self):
         return "%s - %s" % (self.content, self.author)
 
+    class Meta:
+        verbose_name = "댓글"
+        verbose_name_plural = "댓글 목록"
+
 
 class Reply(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -89,3 +103,7 @@ class Reply(models.Model):
 
     def __str__(self):
         return "%s - %s" % (self.content, self.author)
+
+    class Meta:
+        verbose_name = "대댓글"
+        verbose_name_plural = "대댓글 목록"

@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from memo.models import Memo
+
+
+@admin.register(Memo)
+class MemoAdmin(admin.ModelAdmin):
+    pass
